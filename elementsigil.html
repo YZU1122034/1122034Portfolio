@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Sigil - 遊戲介紹</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 定義主頁使用的色彩變數，讓導覽列色彩一致 */
+        :root {
+            --accent-blue: #1275ff;
+            --accent-orange: #ff8d30;
+            --text-muted: #475569;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 全域設定與波卡圓點背景 */
+        body {
+            background-color: #f7f7f7; 
+            background-image: radial-gradient(#d1d1d1 2.5px, transparent 2.5px);
+            background-size: 25px 25px; 
+            font-family: 'Inter', "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            margin: 0;
+            /* 頂部增加 padding 避開固定導覽列 */
+            padding: 120px 20px 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #000000;
+            position: relative;
+        }
+
+        /* 🌐 導覽列樣式 (桌機版) */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .nav-container {
+            width: 100%;
+            padding: 1.2rem 6vw; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px; 
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        /* 桌機版導覽連結 */
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            margin-left: 2.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* 📱 手機版漢堡選單按鈕 (預設隱藏) */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        /* ⬅️ 返回鍵樣式 */
+        .back-btn {
+            position: absolute;
+            top: 100px; /* 往下調整避開導覽列 */
+            left: 40px;
+            text-decoration: none;
+            color: #333333;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #ffffff;
+            padding: 10px 22px;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            z-index: 100;
+            border: 1px solid #eeeeee;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+            color: #000000;
+        }
+
+        /* 限制內容最大寬度，保持排版比例 */
+        .container {
+            max-width: 850px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 頂部黑色大標題 */
+        h1.game-title {
+            text-align: center;
+            color: #000000;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        /* 圖片外框共用設定 */
+        .img-wrapper {
+            width: 100%;
+            border: 2px solid #333333;
+            box-sizing: border-box;
+            background-color: #e2e8f0;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
+        }
+        
+        .img-wrapper img {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .main-visual {
+            aspect-ratio: 16 / 9;
+        }
+
+        /* 遊戲介紹內文 */
+        .text-block {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            text-align: justify; 
+            text-align-last: center; 
+            margin-bottom: 40px;
+            padding: 0 20px;
+            font-weight: 700; 
+            color: #111111;
+            width: 95%;
+        }
+
+        /* 2x2 雙欄圖片網格 */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            border: 2px solid #333333;
+            box-sizing: border-box;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-grid img:first-child {
+            border-right: 2px solid #333333;
+            box-sizing: border-box;
+        }
+
+        /* RWD: 手機版適應 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 130px;
+            }
+            
+            /* 📱 啟動手機版導覽列模式 */
+            .mobile-menu-btn {
+                display: block;
+            }
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                /* 隱藏選單 (透過高度變化來做動畫) */
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease-out;
+            }
+            /* 當加入 active class 時展開選單 */
+            .nav-links.active {
+                max-height: 300px;
+                padding: 1.5rem 0;
+            }
+            .nav-links a {
+                margin: 0.8rem 0;
+                font-size: 1.1rem;
+            }
+
+            .back-btn {
+                top: 85px; left: 15px; font-size: 0.95rem; padding: 8px 16px;
+            }
+            h1.game-title {
+                font-size: 2.8rem;
+                margin-top: 20px;
+            }
+            .text-block {
+                text-align-last: left; 
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr; 
+            }
+            .gallery-grid img:first-child {
+                border-right: none;
+                border-bottom: 2px solid #333333;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Portfolio</a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="index.html#about">關於我</a>
+                <a href="index.html#game">遊戲設計</a>
+                <a href="index.html#web">網頁設計</a>
+                <a href="index.html#uiux">UI/UX 設計</a>
+            </div>
+        </div>
+    </nav>
+
+    <a href="index.html" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> 返回主頁
+    </a>
+
+    <div class="container">
+        <h1 class="game-title">Element Sigil</h1>
+
+        <div class="img-wrapper main-visual">
+            <img src="./pict/lose (2).png" alt="Element Sigil 主畫面">
+        </div>
+
+        <div class="text-block">
+            本專案結合戰鬥與創作，嘗試探索一種嶄新的 VR 遊戲玩法，突破傳統僅著重於擊敗敵人的框架，讓玩家在力量與美感之間取得平衡。遊戲希望在短時間內帶給玩家成就感與創作樂趣。同時體驗在 VR 環境中親手塑造世界的刺激感；透過直覺式的操作設計，也讓每位玩家都能輕鬆上手。
+        </div>
+
+        <div class="gallery-grid">
+            <img src="./pict/fight (1).png" alt="戰鬥畫面 1">
+            <img src="./pict/fight (2).png" alt="戰鬥畫面 2">
+        </div>
+
+        <div class="text-block">
+            本遊戲以 VR 符文繪製與戰鬥為核心，玩家需在空中描繪圓形、三角形、閃電等符號來施放攻擊。並在教學區學習操作後進入主場景，與持續生成並追擊玩家的「色彩幽靈」對戰。玩家扮演「符文召喚者」，初始擁有 3 HP，遭受三次攻擊即失敗；敵人被擊敗後會釋放顏料，而「符文核心」則偶爾提供回血與護盾。隨著戰鬥進行，場景會逐漸被色彩覆蓋，最後在結束時呈現由戰鬥所創造出的獨特藝術畫面。
+        </div>
+
+        <div class="gallery-grid">
+            <img src="./pict/lose (3).png" alt="勝利畫面">
+            <img src="./pict/lose (1).png" alt="失敗畫面">
+        </div>
+    </div>
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            // 切換 active 狀態來展開或收合選單
+            navLinks.classList.toggle('active');
+            
+            // 動態切換按鈕的圖示 (漢堡條 <-> 叉叉)
+            const icon = mobileMenuBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+    </script>
+</body>
+</html>

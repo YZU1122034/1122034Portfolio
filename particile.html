@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科技節點粒子特效 (Particle Network)</title>
+    <style>
+        /* 重置預設邊距並隱藏捲軸 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* 科技感微漸層背景 */
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        /* 讓 Canvas 填滿整個畫面 */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 負責渲染粒子的畫布 -->
+    <canvas id="particle-canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        // 設定畫布尺寸符合視窗
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 監聽視窗縮放，確保畫布大小與粒子分佈能自動適應
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        // 定義粒子物件類別
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            
+            // 繪製單個粒子
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            
+            // 更新粒子位置（碰到邊界會反彈）
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        // 初始化粒子陣列
+        function init() {
+            particlesArray = [];
+            // 根據螢幕大小決定粒子數量，避免螢幕過大時粒子太稀疏或過小而卡頓
+            let numberOfParticles = (canvas.height * canvas.width) / 12000;
+            
+            // 設定粒子的顏色組合（科技藍、活力橘、質感灰）
+            const colors = [
+                'rgba(18, 117, 255, 0.6)', 
+                'rgba(255, 141, 48, 0.6)', 
+                'rgba(148, 163, 184, 0.5)'
+            ]; 
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1.5; // 隨機大小
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.8) - 0.4; // 隨機水平移動速度
+                let directionY = (Math.random() * 0.8) - 0.4; // 隨機垂直移動速度
+                let color = colors[Math.floor(Math.random() * colors.length)]; // 隨機挑選顏色
+                
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // 計算粒子之間的距離並繪製節點連線
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    // 計算兩點之間的距離平方（節省開根號的效能）
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    
+                    // 當兩個粒子距離夠近時，畫出一條線
+                    if (distance < (canvas.width / 12) * (canvas.height / 12)) {
+                        // 距離越遠，線條越透明
+                        opacityValue = 1 - (distance / 15000);
+                        ctx.strokeStyle = `rgba(148, 163, 184, ${opacityValue * 0.3})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // 動畫循環，持續更新每一幀
+        function animate() {
+            requestAnimationFrame(animate);
+            // 每次繪製前清空畫布
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect(); // 執行連線運算
+        }
+
+        // 啟動特效
+        init();
+        animate();
+    </script>
+</body>
+</html>

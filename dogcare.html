@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>犬心治 - 網站介紹</title>
+    <!-- 匯入所需的字體，包含 Inter 供導覽列使用 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 定義導覽列使用的色彩變數 */
+        :root {
+            --accent-blue: #1275ff;
+            --accent-orange: #ff8d30;
+            --text-muted: #475569;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 全域設定與溫暖米黃底色 */
+        body {
+            background-color: #f7f4ed; /* 溫暖的奶油米黃色 */
+            font-family: 'Inter', "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            margin: 0;
+            /* 頂部增加 padding 避開固定導覽列 */
+            padding: 120px 20px 80px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #111111;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 🌐 導覽列樣式 (桌機版) */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .nav-container {
+            width: 100%;
+            padding: 1.2rem 6vw; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px; 
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        /* 桌機版導覽連結 */
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            margin-left: 2.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* 📱 手機版漢堡選單按鈕 (預設隱藏) */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        /* ⬅️ 返回鍵樣式 */
+        .back-btn {
+            position: absolute;
+            top: 100px; /* 往下調整避開導覽列 */
+            left: 40px;
+            text-decoration: none;
+            color: #333333;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #ffffff;
+            padding: 10px 22px;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            z-index: 100;
+            border: 1px solid #eeeeee;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+            color: #f0895d;
+        }
+
+        /* 限制內容最大寬度 */
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        /* 頂部橘色大標題 */
+        h1.site-title {
+            text-align: center;
+            color: #f29468; 
+            font-size: 5rem;
+            font-weight: 900;
+            margin-top: 0;
+            margin-bottom: 60px;
+            font-family: 'Noto Sans TC', sans-serif;
+            letter-spacing: 5px;
+        }
+
+        /* 圖片交錯疊加外層共用 */
+        .collage-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 圖片共用互動與內襯 */
+        .collage-wrapper img {
+            background-color: #ffffff;
+            padding: 6px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            object-fit: cover;
+            position: relative;
+        }
+
+        .collage-wrapper img:hover {
+            transform: translateY(-8px) scale(1.02);
+            z-index: 50 !important;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        /* 樣式 1：橘色虛線邊框 (上半部使用) */
+        .border-dashed {
+            border: 5px dashed #f09e60;
+            border-radius: 12px;
+        }
+
+        /* 樣式 2：橘色實線邊框 (下半部使用) */
+        .border-solid {
+            border: 5px solid #e89528;
+            border-radius: 8px;
+        }
+
+        /* ======= 第一組排版：右側 Q&A + 左側狗狗 ======= */
+        .g1-img-qna { 
+            width: 60%; 
+            align-self: flex-end; 
+            margin-right: 5%;
+            z-index: 1; 
+            aspect-ratio: 16 / 9;
+        }
+        .g1-img-dog { 
+            width: 70%; 
+            align-self: flex-start; 
+            z-index: 2; 
+            margin-top: -22%; 
+            margin-left: 2%; 
+            aspect-ratio: 16 / 9;
+        }
+
+        /* ======= 第二組排版：中央信件 + 左右小卡 ======= */
+        .g2-img-letter { 
+            width: 70%; 
+            align-self: center;
+            z-index: 1; 
+            aspect-ratio: 4 / 3; 
+        }
+        /* 底部左右兩張圖的水平容器 */
+        .g2-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            align-self: center;
+            margin-top: -15%; 
+            z-index: 2;
+        }
+        .g2-img-goal { 
+            width: 35%; 
+            aspect-ratio: 1 / 1; 
+            margin-top: 5%; 
+        }
+        .g2-img-btn { 
+            width: 40%; 
+            aspect-ratio: 4 / 3; 
+        }
+
+        /* 介紹內文區塊 */
+        .text-block {
+            font-size: 1.1rem;
+            line-height: 2;
+            text-align: justify; 
+            text-align-last: center; 
+            margin-bottom: 80px;
+            padding: 0 20px;
+            font-weight: 700; 
+            color: #222222;
+            width: 90%;
+        }
+
+        /* RWD: 手機版適應 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 130px;
+            }
+            
+            /* 📱 啟動手機版導覽列模式 */
+            .mobile-menu-btn {
+                display: block;
+            }
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease-out;
+            }
+            .nav-links.active {
+                max-height: 300px;
+                padding: 1.5rem 0;
+            }
+            .nav-links a {
+                margin: 0.8rem 0;
+                font-size: 1.1rem;
+            }
+
+            .back-btn { top: 85px; left: 15px; font-size: 0.95rem; padding: 8px 16px; }
+            h1.site-title { font-size: 3.5rem; margin-top: 30px; margin-bottom: 40px; }
+            
+            .g1-img-qna, .g1-img-dog { width: 95%; align-self: center; margin: 0 0 15px 0; }
+            .g2-img-letter { width: 95%; aspect-ratio: auto; }
+            .g2-bottom-row { width: 100%; flex-direction: column; align-items: center; margin-top: 15px; gap: 15px; }
+            .g2-img-goal, .g2-img-btn { width: 80%; margin-top: 0; }
+            
+            .text-block {
+                text-align-last: left; 
+                padding: 0 15px;
+                margin-bottom: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部導覽列 -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Portfolio</a>
+            
+            <!-- 手機版漢堡選單按鈕 -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <!-- 導覽連結 (加上 index.html 保證能連回主頁錨點) -->
+            <div class="nav-links" id="navLinks">
+                <a href="index.html#about">關於我</a>
+                <a href="index.html#game">遊戲設計</a>
+                <a href="index.html#web">網頁設計</a>
+                <a href="index.html#uiux">UI/UX 設計</a>
+            </div>
+        </div>
+    </nav>
+
+    <a href="index.html" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> 返回主頁
+    </a>
+
+    <div class="container">
+        <h1 class="site-title">犬心治</h1>
+
+        <div class="collage-wrapper">
+            <img class="g1-img-qna border-dashed" src="../pict/犬心治_頁面_2.jpg" alt="犬心治 常見問題與Q&A" onerror="this.src='https://via.placeholder.com/600x337/fca5a5/ffffff?text=Q%26A+Screen'">
+            <img class="g1-img-dog border-dashed" src="../pict/犬心治_頁面_1.jpg" alt="生病狗狗 Baby 的故事" onerror="this.src='https://via.placeholder.com/700x394/1f2937/ffffff?text=Dog+Story'">
+        </div>
+        
+        <div class="text-block">
+            這是一個以動物募款為主的網站，主要呈現多隻生病動物的故事，並呼籲大眾提供協助，幫助牠們獲得治療與照護，同時也提供基礎的動物疾病與照顧相關資訊。
+        </div>
+
+        <div class="collage-wrapper">
+            <img class="g2-img-letter border-solid" src="../pict/犬心治_頁面_3.jpg" alt="給捐贈者的一封信" onerror="this.src='https://via.placeholder.com/600x450/fdba74/ffffff?text=Donation+Letter'">
+            
+            <div class="g2-bottom-row">
+                <img class="g2-img-goal border-solid" src="../pict/犬心治_頁面_4.jpg" alt="募款目標進度" onerror="this.src='https://via.placeholder.com/400x400/60a5fa/ffffff?text=Goal+Tracking'">
+                <img class="g2-img-btn border-solid" src="../pict/犬心治_頁面_5.jpg" alt="我要捐款按鈕" onerror="this.src='https://via.placeholder.com/500x375/374151/ffffff?text=Donate+Button'">
+            </div>
+        </div>
+        
+        <div class="text-block" style="margin-bottom: 0;">
+            此頁面主要作為動物救助的捐款平台，核心內容是向捐贈者說明捐款用途與理念，讓使用者了解資金將直接幫助受影響的動物獲得醫療與照護，同時提供基本資料與金額填寫功能，方便使用者完成捐贈。
+        </div>
+
+    </div>
+
+    <!-- 處理手機版導覽列展開/收合的 JavaScript -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            // 切換 active 狀態來展開或收合選單
+            navLinks.classList.toggle('active');
+            
+            // 動態切換按鈕的圖示 (漢堡條 <-> 叉叉)
+            const icon = mobileMenuBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+    </script>
+</body>
+</html>

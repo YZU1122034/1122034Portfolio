@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trick or Treat - 遊戲介紹 (分層版)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 定義主頁使用的色彩變數，讓導覽列色彩一致 */
+        :root {
+            --accent-blue: #1275ff;
+            --accent-orange: #ff8d30;
+            --text-muted: #475569;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 全域設定與底色 */
+        body {
+            background-color: #f3f0e2; /* 奶油米黃底色 */
+            font-family: 'Inter', "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+            margin: 0;
+            /* 頂部增加 padding 避開導覽列 */
+            padding: 120px 20px 60px 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #222222;
+            position: relative; 
+        }
+
+        /* 🌐 導覽列樣式 (桌機版) */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .nav-container {
+            width: 100%;
+            padding: 1.2rem 6vw; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px; 
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        
+        /* 桌機版導覽連結 */
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            margin-left: 2.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* 📱 手機版漢堡選單按鈕 (預設隱藏) */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        /* ⬅️ 返回鍵樣式 */
+        .back-btn {
+            position: absolute;
+            top: 100px; 
+            left: 40px;
+            text-decoration: none;
+            color: #ff6a22; 
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #ffffff;
+            padding: 10px 22px;
+            border-radius: 50px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px); 
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+            color: #e55a15;
+        }
+
+        /* 限制內容最大寬度，保持排版比例 */
+        .container {
+            max-width: 850px;
+            width: 100%;
+            position: relative;
+            margin-top: 20px; 
+        }
+
+        /* 第一層：頂部橘色大標題 */
+        h1.game-title {
+            text-align: center;
+            color: #ff6a22; 
+            font-size: 4.8rem;
+            font-weight: 900;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-family: 'Arial Black', Impact, sans-serif;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.05); 
+        }
+
+        /* 第二層：主視覺圖區塊 */
+        .main-visual-layer {
+            width: 100%;
+            border: 6px solid #8134df; 
+            box-sizing: border-box;
+            background-color: #2b1d42; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); 
+            position: relative;
+            z-index: 1; 
+        }
+
+        .main-visual-layer img {
+            width: 100%;
+            display: block;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+
+        /* 第三層：懸浮文字卡片 */
+        .description-layer {
+            background-color: #ffffff; 
+            border-radius: 16px; 
+            padding: 45px 50px;
+            margin: -40px auto 50px auto; 
+            width: 90%; 
+            box-sizing: border-box;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); 
+            position: relative;
+            z-index: 10; 
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .description-layer p {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            text-align: justify; 
+            margin: 0;
+            font-weight: 700;
+            color: #333333;
+        }
+
+        /* 第四層：底部遊戲場景網格區塊 */
+        .gallery-layer {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-color: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+            border-radius: 12px;
+            overflow: hidden; 
+            position: relative;
+            z-index: 5;
+        }
+
+        .gallery-layer img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-layer img:hover {
+            transform: scale(1.03);
+            z-index: 2;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        /* RWD: 手機版適應 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 130px; 
+            }
+            
+            /* 📱 啟動手機版導覽列模式 */
+            .mobile-menu-btn {
+                display: block;
+            }
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                /* 隱藏選單 (透過高度變化來做動畫) */
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease-out;
+            }
+            /* 當加入 active class 時展開選單 */
+            .nav-links.active {
+                max-height: 300px;
+                padding: 1.5rem 0;
+            }
+            .nav-links a {
+                margin: 0.8rem 0;
+                font-size: 1.1rem;
+            }
+
+            .back-btn {
+                top: 85px;
+                left: 20px;
+                font-size: 0.95rem;
+                padding: 8px 16px;
+            }
+            h1.game-title {
+                font-size: 3.5rem;
+            }
+            .description-layer {
+                width: 95%;
+                padding: 30px 20px;
+                margin-top: -20px;
+            }
+            .gallery-layer {
+                grid-template-columns: 1fr; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">Portfolio</a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="index.html#about">關於我</a>
+                <a href="index.html#game">遊戲設計</a>
+                <a href="index.html#web">網頁設計</a>
+                <a href="index.html#uiux">UI/UX 設計</a>
+            </div>
+        </div>
+    </nav>
+
+    <a href="index.html" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> 返回主頁
+    </a>
+
+    <div class="container">
+        <h1 class="game-title">Trick or Treat</h1>
+
+        <div class="main-visual-layer">
+            <img src="./pict/4.png" alt="Trick or Treat 主畫面">
+        </div>
+
+        <div class="description-layer">
+            <p>
+                本遊戲主要面向喜歡可愛畫風與萬聖節主題的 12 歲以上玩家，也很適合休閒玩家、女性玩家、小眾獨立遊戲愛好者，以及喜歡打怪元素的族群，同時也能讓親子一起享受溫馨、不驚嚇的冒險體驗。故事描述初學魔法的小女巫 Fiora 在萬聖夜接下神秘任務，必須找回被惡作劇精靈奪走的「萬聖魔法核心」，否則整個小鎮將失去萬聖節的魔法力量；玩家將穿越小鎮、古老森林與鬼屋城堡，與可愛又搞怪的怪物互動並展開冒險。遊戲特色包含依序施放對應咒語擊退怪物，並在不同場景中挑戰各種敵人與關卡，讓玩家透過簡單上手但具挑戰性的操作，享受輕鬆又充滿節慶氛圍的冒險體驗。
+            </p>
+        </div>
+
+        <div class="gallery-layer">
+            <img src="./pict/4 (1).png" alt="場景 1">
+            <img src="./pict/4 (2).png" alt="場景 2">
+            <img src="./pict/4 (3).png" alt="場景 3">
+            <img src="./pict/4 (4).png" alt="場景 4">
+        </div>
+    </div>
+
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            // 切換 active 狀態來展開或收合選單
+            navLinks.classList.toggle('active');
+            
+            // 動態切換按鈕的圖示 (漢堡條 <-> 叉叉)
+            const icon = mobileMenuBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+    </script>
+</body>
+</html>

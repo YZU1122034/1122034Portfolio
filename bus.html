@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桃園搭公車 - App 介紹</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Inter:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f3f0e6;
+            font-family: "Noto Sans TC", sans-serif;
+            margin: 0;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 700;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+
+        .main-phone {
+            width: 250px;
+        }
+
+        .main-phone img {
+            width: 100%;
+            display: block;
+        }
+
+        .hero-title {
+            color: #272ef2;
+            font-size: 5rem;
+            font-weight: 900;
+            font-family: 'Inter', sans-serif;
+            line-height: 1;
+            letter-spacing: 5px;
+        }
+
+        .description {
+            max-width: 700px;
+            text-align: center;
+            font-weight: 900;
+            line-height: 1.8;
+            margin: 0 auto 60px;
+        }
+
+        .showcase {
+            width: 100%;
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .showcase.detail-open {
+            height: 420px;
+            overflow: visible;
+        }
+
+        .small-phone {
+            width: 200px;
+            position: absolute;
+            cursor: pointer;
+            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.2));
+
+            --x: 0px;
+            --s: 1;
+            --o: 1;
+
+            transform: translateX(var(--x)) scale(var(--s));
+            opacity: var(--o);
+            transition:
+                transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.85s ease,
+                filter 0.85s ease;
+        }
+
+        .small-phone img {
+            width: 100%;
+            display: block;
+        }
+
+        .pos-0 {
+            --x: -350px;
+            --s: 0.7;
+            --o: 0.45;
+            z-index: 1;
+        }
+
+        .pos-1 {
+            --x: -180px;
+            --s: 0.85;
+            --o: 0.75;
+            z-index: 2;
+        }
+
+        .pos-2 {
+            --x: 0px;
+            --s: 1.12;
+            --o: 1;
+            z-index: 10;
+        }
+
+        .pos-3 {
+            --x: 180px;
+            --s: 0.85;
+            --o: 0.75;
+            z-index: 2;
+        }
+
+        .pos-4 {
+            --x: 350px;
+            --s: 0.7;
+            --o: 0.45;
+            z-index: 1;
+        }
+
+        .small-phone:hover {
+            transform: translateX(var(--x)) scale(calc(var(--s) * 1.04));
+            filter: drop-shadow(0 22px 28px rgba(0,0,0,0.28));
+            z-index: 20;
+        }
+
+        .pos-2 img {
+            animation: phoneFloat 2.8s ease-in-out infinite;
+        }
+
+        @keyframes phoneFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            width: 74px;
+            height: 120px;
+            border: none;
+            background: rgba(31, 48, 235, 0.546);
+            color: #fff;
+            font-size: 2.4rem;
+            cursor: pointer;
+            z-index: 50;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition:
+                background 0.25s ease,
+                transform 0.25s ease,
+                opacity 0.25s ease;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(42, 94, 236, 0.78);
+            transform: translateY(-50%) scale(1.04);
+        }
+
+        .carousel-btn:active {
+            transform: translateY(-50%) scale(0.96);
+        }
+
+        .carousel-btn-left {
+            left: 70px;
+        }
+
+        .carousel-btn-right {
+            right: 70px;
+        }
+
+        .carousel-btn i {
+            pointer-events: none;
+        }
+
+        .inline-detail {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: min(920px, calc(100% - 80px));
+            min-height: 374px;
+            background: transparent;
+            transform: translate(-50%, -50%);
+            display: none;
+            align-items: center;
+            gap: 46px;
+            padding: 0 58px 0 0;
+            box-sizing: border-box;
+            z-index: 40;
+            animation: detailOpen 0.45s ease both;
+        }
+
+        .inline-detail::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 110px;
+            background: #fff;
+            border-radius: 0 36px 36px 0;
+            z-index: -1;
+        }
+
+        .inline-detail.active {
+            display: flex;
+        }
+
+        .inline-detail-phone {
+            width: 220px;
+            flex: 0 0 auto;
+            margin-left: -8px;
+            filter: drop-shadow(0 12px 18px rgba(0,0,0,0.18));
+            z-index: 2;
+        }
+
+        .inline-detail-phone img {
+            width: 100%;
+            display: block;
+        }
+
+        .inline-detail-content {
+            flex: 1;
+            color: #111;
+            padding-top: 8px;
+            z-index: 2;
+        }
+
+        .inline-detail-title {
+            margin: 0 0 56px;
+            font-family: "Inter", "Noto Sans TC", sans-serif;
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: 0;
+            line-height: 1;
+        }
+
+        .inline-detail-text {
+            margin: 0;
+            max-width: 580px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            line-height: 1.55;
+        }
+
+        .inline-detail-text strong {
+            font-weight: 900;
+        }
+
+        .close-detail {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: #222;
+            font-size: 1.4rem;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .showcase.detail-open .small-phone {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .showcase.detail-open .carousel-btn {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes detailOpen {
+            from {
+                opacity: 0;
+                transform: translate(-46%, -50%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 80px 16px 40px;
+            }
+
+            .back-btn {
+                top: 20px;
+                left: 20px;
+                padding: 8px 16px;
+            }
+
+            .hero {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+                text-align: center;
+            }
+
+            .main-phone {
+                width: 190px;
+            }
+
+            .description {
+                margin-bottom: 35px;
+            }
+
+            .showcase {
+                height: 320px;
+            }
+
+            .showcase.detail-open {
+                height: auto;
+                min-height: 560px;
+            }
+
+            .small-phone {
+                width: 120px;
+            }
+
+            .pos-0 {
+                --x: -150px;
+                --s: 0.6;
+            }
+
+            .pos-1 {
+                --x: -80px;
+                --s: 0.75;
+            }
+
+            .pos-2 {
+                --x: 0px;
+                --s: 1.05;
+            }
+
+            .pos-3 {
+                --x: 80px;
+                --s: 0.75;
+            }
+
+            .pos-4 {
+                --x: 150px;
+                --s: 0.6;
+            }
+
+            .carousel-btn {
+                width: 48px;
+                height: 84px;
+                font-size: 1.7rem;
+            }
+
+            .carousel-btn-left {
+                left: 0;
+            }
+
+            .carousel-btn-right {
+                right: 0;
+            }
+
+            .inline-detail {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 100%;
+                min-height: auto;
+                transform: none;
+                flex-direction: column;
+                gap: 24px;
+                padding: 28px 24px 32px;
+                border-radius: 28px;
+                text-align: center;
+                animation: mobileDetailOpen 0.45s ease both;
+            }
+
+            .inline-detail::before {
+                left: 0;
+                border-radius: 28px;
+            }
+
+            .inline-detail-phone {
+                width: 180px;
+                margin-left: 0;
+            }
+
+            .inline-detail-title {
+                margin-bottom: 24px;
+                font-size: 2.3rem;
+            }
+
+            .inline-detail-text {
+                font-size: 1rem;
+            }
+
+            @keyframes mobileDetailOpen {
+                from {
+                    opacity: 0;
+                    transform: translateY(24px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> 返回主頁
+    </a>
+
+    <div class="container">
+        <div class="hero">
+            <div class="main-phone">
+                <img src="./pict/image 11.png" alt="桃園搭公車 首頁">
+            </div>
+            <div class="hero-title">桃園搭公車</div>
+        </div>
+
+        <div class="description">
+            本app的主旨是讓經常上班不在家，但又因為擔心寵物不在身邊而無法隨時查看狀況而開發的app
+        </div>
+
+        <div class="showcase" id="carousel">
+            <button class="carousel-btn carousel-btn-left" type="button" aria-label="向前一張">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <div class="small-phone pos-0" data-title="XXXXXX" data-text="本app的主旨是讓經常上班不在家，但又因為擔心寵物不在身邊而無法隨時查看狀況而開發的app">
+                <img src="./pict/image 12.png" alt="畫面 1">
+            </div>
+
+            <div class="small-phone pos-1" data-title="寵物照護" data-text="可以新增寵物資料、查看照護紀錄，讓飼主更清楚掌握寵物日常狀態。">
+                <img src="./pict/image 13.png" alt="畫面 2">
+            </div>
+
+            <div class="small-phone pos-2" data-title="即時監控" data-text="透過遠端監控功能，即使人在外面，也能查看家中寵物目前的活動狀況。">
+                <img src="./pict/image 14.png" alt="畫面 3">
+            </div>
+
+            <div class="small-phone pos-3" data-title="智慧鏡頭" data-text="搭配智慧鏡頭功能，幫助使用者更方便觀察寵物，減少不在家時的擔心。">
+                <img src="./pict/image 18.png" alt="畫面 4">
+            </div>
+
+            <div class="small-phone pos-4" data-title="文章推薦" data-text="提供寵物相關文章與知識內容，讓使用者能學習更多照顧寵物的方法。">
+                <img src="./pict/image 27.png" alt="畫面 5">
+            </div>
+
+            <button class="carousel-btn carousel-btn-right" type="button" aria-label="向後一張">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <div class="inline-detail" id="inlineDetail">
+                <button class="close-detail" type="button" aria-label="關閉介紹">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <div class="inline-detail-phone">
+                    <img id="detailImage" src="./pict/image 20.png" alt="詳細畫面">
+                </div>
+
+                <div class="inline-detail-content">
+                    <h2 class="inline-detail-title" id="detailTitle">XXXXXX</h2>
+                    <p class="inline-detail-text" id="detailText">
+                        本<strong>app</strong>的主旨是讓經常上班不在家，但又因為擔心寵物不在身邊而無法隨時查看狀況而開發的<strong>app</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const carousel = document.querySelector('#carousel');
+        const phones = document.querySelectorAll('.small-phone');
+        const prevBtn = document.querySelector('.carousel-btn-left');
+        const nextBtn = document.querySelector('.carousel-btn-right');
+        const inlineDetail = document.querySelector('#inlineDetail');
+        const closeDetailBtn = document.querySelector('.close-detail');
+        const detailImage = document.querySelector('#detailImage');
+        const detailTitle = document.querySelector('#detailTitle');
+        const detailText = document.querySelector('#detailText');
+
+        let positions = ['pos-0', 'pos-1', 'pos-2', 'pos-3', 'pos-4'];
+        let isAnimating = false;
+
+        function updateCarousel() {
+            phones.forEach((phone, index) => {
+                phone.className = `small-phone ${positions[index]}`;
+            });
+        }
+
+        function lockAnimation() {
+            isAnimating = true;
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 850);
+        }
+
+        function showPrev() {
+            if (isAnimating) return;
+
+            const first = positions.shift();
+            positions.push(first);
+            updateCarousel();
+            lockAnimation();
+        }
+
+        function showNext() {
+            if (isAnimating) return;
+
+            const last = positions.pop();
+            positions.unshift(last);
+            updateCarousel();
+            lockAnimation();
+        }
+
+        function showDetail(phone) {
+            const image = phone.querySelector('img');
+            const title = phone.dataset.title;
+            const text = phone.dataset.text;
+
+            detailImage.src = image.src;
+            detailImage.alt = image.alt;
+            detailTitle.textContent = title;
+            detailText.innerHTML = text.replaceAll('app', '<strong>app</strong>');
+
+            carousel.classList.add('detail-open');
+            inlineDetail.classList.remove('active');
+
+            requestAnimationFrame(() => {
+                inlineDetail.classList.add('active');
+            });
+        }
+
+        function closeDetail() {
+            inlineDetail.classList.remove('active');
+            carousel.classList.remove('detail-open');
+        }
+
+        phones.forEach((phone) => {
+            phone.addEventListener('click', () => {
+                showDetail(phone);
+            });
+        });
+
+        prevBtn.addEventListener('click', showPrev);
+        nextBtn.addEventListener('click', showNext);
+        closeDetailBtn.addEventListener('click', closeDetail);
+
+        updateCarousel();
+    </script>
+</body>
+</html>

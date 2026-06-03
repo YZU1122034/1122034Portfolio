@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鍾翔壹 Chung Hsiang-Yi | 個人線上作品集</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* 新增：讓網頁錨點跳轉變成平滑捲動 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        :root {
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-blue: #1275ff;
+            --accent-orange: #ff8d30;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            color: var(--text-main);
+            line-height: 1.6; 
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        /* 🚀 Canvas 粒子特效背景 */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 導覽列 (加入透明與位移設定) */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            
+            /* 👇 隱藏與動畫設定 */
+            opacity: 0; 
+            transform: translateY(30px); 
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+            pointer-events: none; 
+        }
+        
+        /* 👇 當 JS 偵測到滑動後，加上這個 class 來顯示 */
+        nav.nav-visible {
+            opacity: 1; 
+            transform: translateY(0); 
+            pointer-events: auto; 
+        }
+
+        .nav-container {
+            width: 100%;
+            padding: 1.2rem 6vw; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px; 
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            margin-left: 2.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* 新增：手機版漢堡選單按鈕 (桌機預設隱藏) */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        /* 通用滿版區塊設定 */
+        .full-width-section {
+            width: 100%;
+            padding: 5rem 6vw; 
+            position: relative;
+        }
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .bg-white { 
+            background-color: rgba(255, 255, 255, 0.5); 
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255,255,255,0.6);
+            border-bottom: 1px solid rgba(255,255,255,0.6);
+        }
+        .bg-transparent { background-color: transparent; }
+
+        /* 💥 巨型標題區塊設定 */
+        .massive-heading-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 5rem auto; /* 置中並與下方自介保持距離 */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .massive-title {
+            font-family: 'Anton', sans-serif;
+            font-size: clamp(4.5rem, 14vw, 13rem); 
+            line-height: 0.85; 
+            text-transform: uppercase;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        /* 針對中間細斜體文字的特殊設定 */
+        .massive-title .thin-italic {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(3rem, 10vw, 9rem);
+            letter-spacing: 0;
+            color: var(--text-muted);
+        }
+
+        /* Hero (關於我) 區塊精準修復 */
+        .hero-wrapper {
+            padding-top: 8rem; 
+        }
+        
+        /* 👇 給實際的「關於我」區塊加上捲動間距，避免跳轉時被頂部導覽列擋住 */
+        #about {
+            scroll-margin-top: 120px; 
+        }
+        /* 新增：給其他區塊也預留導覽列空間 */
+        #game, #web, #uiux {
+            scroll-margin-top: 70px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 2.2fr; 
+            gap: 5rem;
+            align-items: center;
+        }
+        @media (max-width: 992px) {
+            .hero { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+        }
+        .avatar-container {
+            width: 100%;
+            max-width: 300px; 
+            margin: 0 auto;
+        }
+        .avatar {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .hero-text h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+        .hero-text .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .hero-text .bio {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 2.5rem;
+            text-align: justify;
+            line-height: 1.8;
+            max-width: 850px;
+        }
+        .contact-info {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 992px) { .contact-info { justify-content: center; } }
+        .contact-item {
+            background: #ffffff; 
+            padding: 0.8rem 1.6rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+        }
+        .contact-item i { color: var(--accent-blue); margin-right: 0.6rem; font-size: 1.1rem; }
+
+        /* 專業技能與學經歷 */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+        @media (max-width: 992px) { .meta-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+        .meta-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem; 
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .meta-card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        .skill-badge {
+            background: rgba(241, 245, 249, 0.9);
+            color: #334155;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .timeline-item {
+            border-left: 3px solid #cbd5e1;
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 6px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--accent-orange);
+        }
+        .timeline-title { font-weight: 600; font-size: 1.1rem; }
+        .timeline-desc { color: var(--text-muted); font-size: 0.95rem; margin-top: 0.4rem; } 
+
+        /* 作品集網格 */
+        .section-header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-top: 0.8rem;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 2rem; 
+            align-items: stretch; /* 確保網格內項目等高 */
+        }
+        @media (max-width: 1100px) {
+            .project-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .project-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(255,255,255,0.8);
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* 確保卡片撐滿網格高度 */
+        }
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+        }
+        .project-img-wrapper {
+            width: 100%;
+            aspect-ratio: 16/10; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 1.6rem;
+        }
+        
+        /* 漸層佔位圖 */
+        .img-game-1 { background: linear-gradient(135deg, #2e1065, #3b0764); color: #c084fc; }
+        .img-game-2 { background: linear-gradient(135deg, #1e293b, #475569); color: #cbd5e1; }
+        .img-web-1 { background: linear-gradient(135deg, #fff1f2, #ffe4e6); color: #fb7185; }
+        .img-web-2 { background: linear-gradient(135deg, #ffedd5, #fed7aa); color: #ea580c; }
+        .img-ui-1 { background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: #059669; }
+        .img-ui-2 { background: linear-gradient(135deg, #eff6ff, #dbeafe); color: #2563eb; }
+        .img-ui-3 { background: linear-gradient(135deg, #fef7ee, #fef08a); color: #ca8a04; }
+
+        .project-content {
+            padding: 1.8rem; 
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* 讓內容區塊自動延伸填滿剩下的空間 */
+        }
+        .project-tag {
+            align-self: flex-start;
+            font-size: 0.8rem; 
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 0.35rem 0.7rem;
+            border-radius: 6px;
+            margin-bottom: 0.8rem;
+        }
+        .tag-game { background: #fae8ff; color: #a21caf; }
+        .tag-web { background: #e0f2fe; color: #0369a1; }
+        .tag-ui { background: #fef3c7; color: #b45309; }
+
+        .project-title {
+            font-size: 1.3rem; 
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+        .project-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem; 
+            margin-bottom: 0; 
+            text-align: justify;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        /* 頁尾 */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 3rem 2rem;
+            font-size: 0.95rem; 
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --nav-height: 92px;
+                --nav-gap: 14px;
+            }
+
+            .nav-container {
+                padding: 1rem 16px;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+                line-height: 1.2;
+            }
+
+            /* 新增：顯示手機版選單按鈕 */
+            .mobile-menu-btn {
+                display: block;
+                align-self: center;
+                margin-top: -2px;
+            }
+
+            /* 新增：手機版選單展開樣式 */
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                align-items: center;
+                padding: 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.4s ease-out;
+            }
+            .nav-links.active {
+                max-height: 300px;
+                padding: 1.5rem 0;
+            }
+            .nav-links a {
+                margin: 0.8rem 0;
+                font-size: 1.1rem;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Portfolio</div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <div class="nav-links" id="navLinks">
+                <a href="#about">關於我</a>
+                <a href="#game">遊戲設計</a>
+                <a href="#web">網頁設計</a>
+                <a href="#uiux">UI/UX 設計</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="full-width-section bg-transparent hero-wrapper">
+        <div class="massive-heading-container">
+            <div class="massive-title">DESIGN</div>
+            <div class="massive-title"><span class="thin-italic">IS AN</span></div>
+            <div class="massive-title">ART FORM</div>
+        </div>
+
+        <div class="section-inner hero" id="about">
+            <div class="avatar-container">
+                <img src="../pict/生活照.png" alt="鍾翔壹" class="avatar">
+            </div>
+            <div class="hero-text">
+                <h1>鍾翔壹</h1>
+                <div class="subtitle">Chung Hsiang-Yi</div>
+                <p class="bio">
+                    我來自元智大學資訊傳播學系科技組，對於遊戲設計充滿熱忱，喜歡製作遊戲並挑戰不同遊戲風格。我最近沉迷於寶可夢相關及瑪利歐賽車等遊戲，所以在學校上課時我很積極的去選跟遊戲設計相關的課程。
+                </p>
+                <div class="contact-info">
+                    <div class="contact-item"><i class="fa-solid fa-envelope"></i>peter.chung1158@gmail.com</div>
+                    <div class="contact-item"><i class="fa-solid fa-phone"></i>0972799251</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="full-width-section bg-white">
+        <div class="section-inner meta-grid">
+            <div class="meta-card">
+                <h2><i class="fa-solid fa-code" style="color:var(--accent-blue)"></i> 專業技能</h2>
+                <div class="skills-grid">
+                    <span class="skill-badge">Unity</span>
+                    <span class="skill-badge">Html</span>
+                    <span class="skill-badge">css</span>
+                    <span class="skill-badge">C++</span>
+                    <span class="skill-badge">C#</span>
+                    <span class="skill-badge">Java</span>
+                    <span class="skill-badge">javascript</span>
+                    <span class="skill-badge">Python</span>
+                </div>
+            </div>
+            <div class="meta-card">
+                <h2><i class="fa-solid fa-graduation-cap" style="color:var(--accent-orange)"></i> 學歷與競賽</h2>
+                <div class="timeline-item">
+                    <div class="timeline-title">元智大學 資訊傳播學系科技組 學士</div>
+                    <div class="timeline-desc">學位資訊</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">第23屆育秀杯創意獎工業設計類</div>
+                    <div class="timeline-desc">預賽</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="full-width-section bg-transparent" id="game">
+        <div class="section-inner">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-gamepad" style="color:var(--accent-orange)"></i> Game Design</h2>
+                <p>創造趣味互動與沈浸式遊戲體驗</p>
+            </div>
+            <div class="project-grid">
+                <a href="tricktreat.html" class="project-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="project-img-wrapper img-game-1"><i class="fa-solid fa-ghost fa-2x"></i></div>
+                    <div class="project-content">
+                        <span class="project-tag tag-game">2D遊戲</span>
+                        <div class="project-title">Trick or Treat</div>
+                        <div class="project-desc">這是一款以萬聖節為主題的2D平面遊戲。</div>
+                    </div>
+                </a>
+                <a href="elementsigil.html" class="project-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="project-img-wrapper img-game-2"><i class="fa-solid fa-wand-sparkles fa-2x"></i></div>
+                    <div class="project-content">
+                        <span class="project-tag tag-game">3D遊戲</span>
+                        <div class="project-title">Element Sigil</div>
+                        <div class="project-desc">這是一款以元素符號為主題的3D電腦遊戲。</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="full-width-section bg-white" id="web">
+        <div class="section-inner">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-earth-asia" style="color:var(--accent-blue)"></i> Web Design</h2>
+                <p>著重流暢的使用者旅程與視覺設計</p>
+            </div>
+            <div class="project-grid">
+                <a href="bite.html" class="project-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="project-img-wrapper img-web-1"><i class="fa-solid fa-utensils fa-2x"></i></div>
+                    <div class="project-content">
+                        <span class="project-tag tag-web">Web 開發</span>
+                        <div class="project-title">給我吃一口</div>
+                        <div class="project-desc">本網站主要面向習慣訂外送的年輕族群與學生，重視快速、便捷與互動性體驗，並在「不知道吃什麼」時傾向尋求建議與有趣的選擇方式。</div>
+                    </div>
+                </a>
+                <a href="dogcare.html" class="project-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="project-img-wrapper img-web-2"><i class="fa-solid fa-heart-pulse fa-2x"></i></div>
+                    <div class="project-content">
+                        <span class="project-tag tag-web">Web 開發</span>
+                        <div class="project-title">犬心治</div>
+                        <div class="project-desc">以關懷寵物身心健康為主的網站，讓人了解寵物的相關知識與疾病，並透過募款幫助更多寵物。</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="full-width-section bg-transparent" id="uiux">
+        <div class="section-inner">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-compass-drafting" style="color:#b45309"></i> UI/UX Design</h2>
+                <p>解決用戶問題，打造更友善的產品藍圖</p>
+            </div>
+            <div class="project-grid">
+                <a href="petcare.html" class="project-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="project-img-wrapper img-ui-1"><i class="fa-solid fa-paw fa-2x"></i></div>
+                    <div class="project-content">
+                        <span class="project-tag tag-ui">App 介面設計</span>
+                        <div class="project-title">Petcare</div>
+                        <div class="project-desc">2050 寵物 App 結合即時監測、情緒理解與預測分析，遠端守護健康與陪伴，提升照護精準與安心感。</div>
+                    </div>
+                </a>
+                <a href="bus.html" class="project-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="project-img-wrapper img-ui-2"><i class="fa-solid fa-bus fa-2x"></i></div>
+                    <div class="project-content">
+                        <span class="project-tag tag-ui">App 介面設計</span>
+                        <div class="project-title">桃園等公車</div>
+                        <div class="project-desc">這款APP主要是參考原本桃園等公車來做參考並修改的，刪減了多餘的功能。</div>
+                    </div>
+                </a>
+                <a href="timer.html" class="project-card" style="text-decoration: none; color: inherit; cursor: pointer;">
+                    <div class="project-img-wrapper img-ui-3"><i class="fa-solid fa-clock fa-2x"></i></div>
+                    <div class="project-content">
+                        <span class="project-tag tag-ui">App 介面設計</span>
+                        <div class="project-title">讀書計時器</div>
+                        <div class="project-desc">這款APP主要的功能是讓想認真讀書的學生，可以透過日期及時間來規劃，並透過良好的時間分配來制定一個詳細的讀書計畫。</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Chung Hsiang-Yi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 12000;
+            
+            const colors = [
+                'rgba(18, 117, 255, 0.6)', 
+                'rgba(255, 141, 48, 0.6)', 
+                'rgba(148, 163, 184, 0.5)'
+            ]; 
+            
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1.5; 
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.8) - 0.4; 
+                let directionY = (Math.random() * 0.8) - 0.4; 
+                let color = colors[Math.floor(Math.random() * colors.length)]; 
+                
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    
+                    if (distance < (canvas.width / 12) * (canvas.height / 12)) {
+                        opacityValue = 1 - (distance / 15000);
+                        ctx.strokeStyle = `rgba(148, 163, 184, ${opacityValue * 0.3})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect(); 
+        }
+
+        init();
+        animate();
+
+        // ===== 導覽列滾動精準顯示邏輯 =====
+        const nav = document.querySelector('nav');
+        const heroSection = document.querySelector('.hero');
+
+        window.addEventListener('scroll', () => {
+            if (heroSection && heroSection.getBoundingClientRect().top < 200) {
+                nav.classList.add('nav-visible');
+            } else if (heroSection) {
+                nav.classList.remove('nav-visible');
+            }
+        });
+
+        // ===== 新增：手機版導覽列展開/收合邏輯 =====
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                
+                const icon = mobileMenuBtn.querySelector('i');
+                if (navLinks.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-xmark');
+                } else {
+                    icon.classList.remove('fa-xmark');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

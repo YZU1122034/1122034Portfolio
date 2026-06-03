@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵物 App 介面還原 - 標準外框版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 基礎設定 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
+        }
+        
+        /* 鎖定整個網頁，不允許網頁本身的捲動 */
+        body {
+            background-color: #d1d5db; /* 統一網頁背景色，突顯手機外框 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; 
+        }
+
+        /* =========================================
+           1. 手機外框整體尺寸 (嚴格套用約定標準)
+           ========================================= */
+        .phone-frame {
+            height: 92vh;
+            max-height: 844px;
+            aspect-ratio: 390 / 844;
+            background-color: #f4f4f5; /* 維持原本介面的底色 */
+            border-radius: 50px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            border: 14px solid #111;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 頂部動態島 */
+        .dynamic-island {
+            width: 32%; /* 統一使用 32% 比例 */
+            height: 32px;
+            background-color: #000;
+            border-radius: 20px;
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding-right: 12px;
+        }
+        .dynamic-island-sensor {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        /* =========================================
+           2. 手機內部可捲動內容區 (扣除底部高度)
+           ========================================= */
+        .phone-content {
+            height: calc(100% - 85px); /* 扣除約定好的底部導覽列高度 */
+            overflow-y: scroll;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .phone-content::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        /* 頂部橫幅 (Hero) */
+        .hero-banner {
+            margin: 60px 18px 20px 18px; /* 上方預留 60px 給動態島 */
+            border-radius: 22px;
+            overflow: hidden;
+            position: relative;
+            height: 220px;
+            background: url('https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80') center/cover no-repeat;
+        }
+        .hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+            padding: 20px 15px 15px;
+            color: #fff;
+        }
+        .badge {
+            display: inline-block;
+            background-color: #3b82f6;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+        .hero-title {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .hero-subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* 四宮格功能區 */
+        .grid-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 18px;
+            margin-bottom: 30px;
+        }
+        .grid-item {
+            border-radius: 26px;
+            padding: 30px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            font-size: 19px;
+        }
+        /* 各區塊背景色 (對應原圖) */
+        .bg-orange { background-color: #ffe9d0; }
+        .bg-teal   { background-color: #d5f5e3; }
+        .bg-blue   { background-color: #ebf5ff; }
+        .bg-purple { background-color: #f9ebff; }
+        
+        /* 內部圖示方塊 */
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+            color: white;
+            font-size: 34px;
+        }
+        .bg-orange .icon-box { background-color: #f97316; }
+        .bg-teal .icon-box   { background-color: #14b8a6; }
+        .bg-blue .icon-box   { background-color: #3b82f6; }
+        .bg-purple .icon-box { background-color: #a855f7; }
+
+        /* 文章推薦區塊標題 */
+        .section-header {
+            padding: 0 18px;
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #000;
+        }
+        .section-header i {
+            font-size: 30px;
+        }
+
+        /* 文章推薦卡片 */
+        .article-card {
+            background-color: #ffffc1;
+            margin: 0 18px 20px 18px;
+            border-radius: 26px;
+            padding: 25px;
+        }
+        .article-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+        .author-avatar {
+            width: 45px;
+            height: 45px;
+            background-color: #ddd;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .author-name {
+            font-weight: bold;
+            font-size: 20px;
+            color: #000;
+        }
+        .article-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #111;
+        }
+
+        /* 底部互動圖示 */
+        .article-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #000;
+            font-size: 18px;
+            padding: 0 5px;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        /* =========================================
+           3. 底部導覽列 (嚴格套用約定標準)
+           ========================================= */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 85px; /* 固定為 85px */
+            background-color: #fdba74;
+            display: flex;
+            justify-content: space-around;
+            align-items: center; /* 統一為垂直置中對齊 */
+            padding-bottom: 15px; /* 為 iOS 橫條預留空間 */
+            z-index: 90;
+        }
+        .nav-item {
+            color: #000;
+            font-size: 32px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-frame">
+    <div class="dynamic-island">
+        <div class="dynamic-island-sensor"></div>
+    </div>
+
+    <div class="phone-content">
+        
+        <div class="hero-banner">
+            <div class="hero-overlay">
+                <span class="badge">最新消息</span>
+                <div class="hero-title">2025年寵物健康博覽會即登場</div>
+                <div class="hero-subtitle">探索最新的寵物護理科技與營養趨勢，為您的毛孩帶來更好的生活品質。</div>
+            </div>
+        </div>
+
+        <div class="grid-menu">
+            <a href="#" class="grid-item bg-orange">
+                <div class="icon-box"><i class="fa-solid fa-plus"></i></div>
+                新增貼文
+            </a>
+            <a href="#" class="grid-item bg-teal">
+                <div class="icon-box"><i class="fa-solid fa-kit-medical"></i></div>
+                寵物照護
+            </a>
+            <a href="#" class="grid-item bg-blue">
+                <div class="icon-box"><i class="fa-solid fa-camera"></i></div>
+                智慧鏡頭
+            </a>
+            <a href="#" class="grid-item bg-purple">
+                <div class="icon-box"><i class="fa-solid fa-wifi"></i></div>
+                遠端監控
+            </a>
+        </div>
+
+        <div class="section-header">
+            <i class="fa-solid fa-file-lines"></i> 文章推薦
+        </div>
+
+        <div class="article-card">
+            <div class="article-author">
+                <div class="author-avatar">
+                    <img src="https://static.thenounproject.com/png/2296180-200.png" alt="Dog Avatar">
+                </div>
+                <span class="author-name">黑奇</span>
+            </div>
+            <div class="article-title">
+                解決狗狗一直抓癢或咬皮膚的方式
+            </div>
+            <div class="article-actions">
+                <div class="action-btn"><i class="fa-regular fa-comment"></i> 3</div>
+                <div class="action-btn"><i class="fa-solid fa-retweet"></i></div>
+                <div class="action-btn"><i class="fa-regular fa-heart"></i> 6</div>
+                <div class="action-btn"><i class="fa-solid fa-chart-column"></i> 12</div>
+                <div class="action-btn"><i class="fa-regular fa-bookmark"></i></div>
+                <div class="action-btn"><i class="fa-solid fa-share-nodes"></i></div>
+            </div>
+        </div>
+
+    </div> 
+    
+    <div class="bottom-nav">
+        <a href="#" class="nav-item"><i class="fa-solid fa-house"></i></a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-paw"></i></a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-users"></i></a>
+        <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i></a>
+    </div>
+
+</div> 
+</body>
+</html>
