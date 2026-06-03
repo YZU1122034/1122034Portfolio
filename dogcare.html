@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>犬心治 - 網站介紹</title>
-    <!-- 匯入所需的字體，包含 Inter 供導覽列使用 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -233,6 +232,36 @@
             width: 90%;
         }
 
+        /* 🚀 前往網站按鈕樣式 */
+        .visit-btn-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .visit-website-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #f29468, #e89528);
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 16px 45px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(232, 149, 40, 0.3);
+            transition: var(--transition);
+        }
+
+        .visit-website-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(232, 149, 40, 0.45);
+            color: #ffffff;
+        }
+
         /* RWD: 手機版適應 */
         @media (max-width: 768px) {
             body {
@@ -280,22 +309,28 @@
                 padding: 0 15px;
                 margin-bottom: 60px;
             }
+
+            /* 手機版前往網站按鈕微調 */
+            .visit-btn-container {
+                margin-top: 20px;
+            }
+            .visit-website-btn {
+                font-size: 1.1rem;
+                padding: 14px 35px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- 頂部導覽列 -->
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">Portfolio</a>
             
-            <!-- 手機版漢堡選單按鈕 -->
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fa-solid fa-bars"></i>
             </button>
 
-            <!-- 導覽連結 (加上 index.html 保證能連回主頁錨點) -->
             <div class="nav-links" id="navLinks">
                 <a href="index.html#about">關於我</a>
                 <a href="index.html#game">遊戲設計</a>
@@ -334,9 +369,14 @@
             此頁面主要作為動物救助的捐款平台，核心內容是向捐贈者說明捐款用途與理念，讓使用者了解資金將直接幫助受影響的動物獲得醫療與照護，同時提供基本資料與金額填寫功能，方便使用者完成捐贈。
         </div>
 
+        <div class="visit-btn-container">
+            <a href="https://tubular-naiad-bda170.netlify.app/" target="_blank" class="visit-website-btn">
+                前往網站 <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </div>
+
     </div>
 
-    <!-- 處理手機版導覽列展開/收合的 JavaScript -->
     <script>
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');

@@ -232,6 +232,36 @@
             width: 95%;
         }
 
+        /* 🚀 前往網站按鈕樣式 */
+        .visit-btn-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .visit-website-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--accent-orange), #ff6b00);
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 16px 45px;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(255, 141, 48, 0.3);
+            transition: var(--transition);
+        }
+
+        .visit-website-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(255, 141, 48, 0.45);
+            color: #ffffff;
+        }
+
         /* RWD: 手機版適應 */
         @media (max-width: 768px) {
             body {
@@ -282,6 +312,15 @@
                 text-align-last: left; 
                 padding: 0 15px;
                 margin-bottom: 60px;
+            }
+
+            /* 手機版前往網站按鈕微調 */
+            .visit-btn-container {
+                margin-top: 20px;
+            }
+            .visit-website-btn {
+                font-size: 1.1rem;
+                padding: 14px 35px;
             }
         }
     </style>
@@ -335,6 +374,12 @@
         </div>
         <div class="text-block" style="margin-bottom: 0;">
             整合了店家與餐點的詳細資料，使用者可以在此瀏覽該餐廳的所有菜色。介面提供加減按鈕來選擇數量，並具備完整的購物車檢視功能，方便使用者確認總價格並進行結帳或取消。
+        </div>
+
+        <div class="visit-btn-container">
+            <a href="https://peppy-bonbon-307c82.netlify.app/" target="_blank" class="visit-website-btn">
+                前往網站 <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
         </div>
 
     </div>
