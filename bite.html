@@ -232,34 +232,58 @@
             width: 95%;
         }
 
-        /* 🚀 前往網站按鈕樣式 */
-        .visit-btn-container {
+        /* 🚀 內嵌網站 (Iframe) 視窗樣式 */
+        .iframe-container {
             width: 100%;
+            margin-top: 20px;
+            margin-bottom: 60px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* 模擬瀏覽器標題列 */
+        .iframe-header {
+            background-color: #f1f5f9;
+            padding: 12px 16px;
             display: flex;
-            justify-content: center;
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
-
-        .visit-website-btn {
-            display: inline-flex;
             align-items: center;
-            gap: 12px;
-            background: linear-gradient(135deg, var(--accent-orange), #ff6b00);
-            color: #ffffff;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-decoration: none;
-            padding: 16px 45px;
-            border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(255, 141, 48, 0.3);
-            transition: var(--transition);
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .visit-website-btn:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(255, 141, 48, 0.45);
-            color: #ffffff;
+        /* 瀏覽器紅黃綠燈點 */
+        .iframe-header .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .dot.red { background-color: #ff5f56; }
+        .dot.yellow { background-color: #ffbd2e; }
+        .dot.green { background-color: #27c93f; }
+
+        /* 右上角外連圖示 */
+        .iframe-header .external-link {
+            margin-left: auto;
+            color: var(--text-muted);
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+        .iframe-header .external-link:hover {
+            color: var(--accent-orange);
+            transform: scale(1.1);
+        }
+
+        /* iframe 本體設定 */
+        .iframe-container iframe {
+            width: 100%;
+            height: 600px; /* 電腦版內嵌高度 */
+            display: block;
+            border: none;
+            background-color: #ffffff;
         }
 
         /* RWD: 手機版適應 */
@@ -308,19 +332,21 @@
             }
             .collage-wrapper img { width: 90% !important; margin-left: 5% !important; margin-top: -10% !important; margin-bottom: 10px; }
             .g1-img-1, .g2-img-1, .g3-img-1 { margin-top: 0 !important; }
+            
             .text-block {
                 text-align-last: left; 
                 padding: 0 15px;
-                margin-bottom: 60px;
+                margin-bottom: 40px;
             }
 
-            /* 手機版前往網站按鈕微調 */
-            .visit-btn-container {
-                margin-top: 20px;
+            /* 手機版內嵌視窗微調 */
+            .iframe-container {
+                width: 95%; /* 讓它在手機上留一點邊距 */
+                margin-top: 10px;
+                margin-bottom: 40px;
             }
-            .visit-website-btn {
-                font-size: 1.1rem;
-                padding: 14px 35px;
+            .iframe-container iframe {
+                height: 500px; /* 手機版略為縮短高度 */
             }
         }
     </style>
@@ -372,14 +398,20 @@
             <img class="g3-img-2" src="../pict/給我吃一口_頁面_6.jpg" alt="餐廳詳細資料">
             <img class="g3-img-3" src="../pict/給我吃一口_頁面_7.jpg" alt="餐點詳細與購物車">
         </div>
-        <div class="text-block" style="margin-bottom: 0;">
+        <div class="text-block" style="margin-bottom: 20px;">
             整合了店家與餐點的詳細資料，使用者可以在此瀏覽該餐廳的所有菜色。介面提供加減按鈕來選擇數量，並具備完整的購物車檢視功能，方便使用者確認總價格並進行結帳或取消。
         </div>
 
-        <div class="visit-btn-container">
-            <a href="https://peppy-bonbon-307c82.netlify.app/" target="_blank" class="visit-website-btn">
-                前往網站 <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
+        <div class="iframe-container">
+            <div class="iframe-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <a href="https://peppy-bonbon-307c82.netlify.app/" target="_blank" class="external-link" title="在新視窗開啟網站">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+            <iframe src="https://peppy-bonbon-307c82.netlify.app/" title="給我吃一口 - 網站預覽"></iframe>
         </div>
 
     </div>
