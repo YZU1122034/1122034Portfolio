@@ -286,8 +286,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%); 
-            /* 恢復為 35%，讓 2 個圖示乖乖待在中心兩側 */
-            width: 35%; 
+            /* 稍微加寬，因為圖片變大了，需要多一點空間才不會擠在一起 */
+            width: 45%; 
             display: flex;
             justify-content: space-between; 
             z-index: 2005; 
@@ -301,11 +301,11 @@
         }
 
         .float-icon {
-            width: 80px;
-            height: 80px;
-            background-color: #ffffff;
-            border-radius: 14px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+            /* ⭐ 將尺寸大幅增加 */
+            width: 140px;
+            height: 140px;
+            /* ⭐ 移除白底、圓角與原本的方塊陰影 */
+            background-color: transparent; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -317,9 +317,12 @@
         }
 
         .float-icon img {
-            width: 70%;
-            height: 70%;
+            /* ⭐ 讓圖片填滿整個 140px 的空間 */
+            width: 100%;
+            height: 100%;
             object-fit: contain;
+            /* ⭐ 幫圖片本身的輪廓加上陰影，確保在黑色背景下也能看清楚 */
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
         }
 
         @keyframes wiggle {
@@ -355,8 +358,10 @@
             .gallery-layer { grid-template-columns: 1fr; }
             .bottom-text-layer { margin-top: 30px; padding: 10px; }
             .bottom-text-layer p { font-size: 0.95rem; }
-            .float-icon { width: 60px; height: 60px; border-radius: 10px; }
-            .floating-icons { width: 55%; }
+            
+            /* 手機版浮動圖示調整 */
+            .float-icon { width: 90px; height: 90px; } 
+            .floating-icons { width: 70%; }
         }
     </style>
 </head>
@@ -397,19 +402,19 @@
         </div>
 
         <div class="gallery-layer">
-            <img src="./pict/4 (2).png" alt="場景 1" 
+            <img src="./pict/4 (1).png" alt="場景 1" 
                  data-icon1="./pict/scene1-icon1.png" 
                  data-icon2="./pict/scene1-icon2.png">
             
-            <img src="./pict/4 (3).png" alt="場景 2" 
+            <img src="./pict/4 (2).png" alt="場景 2" 
                  data-icon1="./pict/scene2-icon1.png" 
                  data-icon2="./pict/scene2-icon2.png">
             
-            <img src="./pict/4 (4).png" alt="場景 3" 
+            <img src="./pict/4 (3).png" alt="場景 3" 
                  data-icon1="./pict/scene3-icon1.png" 
                  data-icon2="./pict/scene3-icon2.png">
             
-            <img src="./pict/4 (1).png" alt="場景 4" 
+            <img src="./pict/4 (4).png" alt="場景 4" 
                  data-icon1="./pict/scene4-icon1.png" 
                  data-icon2="./pict/scene4-icon2.png">
         </div>
