@@ -8,8 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* --- 新增：讓整個網頁的錨點跳轉變成平滑捲動 --- */
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* 定義主頁使用的色彩變數，讓導覽列色彩一致 */
         :root {
+            --nav-height: 74px; /* 新增導覽列高度變數 */
             --accent-blue: #1275ff;
             --accent-orange: #ff8d30;
             --text-muted: #475569;
@@ -18,15 +24,36 @@
 
         /* 全域設定與底色 */
         body {
-            background-color: #f3f0e2; 
+            /* 背景色交由底層的 particle-background 處理，確保粒子可見 */
+            background-color: transparent; 
             font-family: 'Inter', "Noto Sans TC", "Microsoft JhengHei", sans-serif;
             margin: 0;
-            padding: 120px 20px 60px 20px; 
+            /* 套用變數高度，並保留下方 padding */
+            padding: calc(var(--nav-height) + 40px) 20px 60px 20px; 
             display: flex;
             flex-direction: column;
             align-items: center;
             color: #222222;
             position: relative; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- 新增：粒子動態背景區塊 --- */
+        .particle-background {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            overflow: hidden;
+            background: #f3f0e2; /* 保留 Trick or Treat 原本的奶油米黃底色 */
+        }
+
+        .particle-background iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
         }
 
         /* 🌐 導覽列樣式 (桌機版) */
@@ -90,7 +117,7 @@
         /* ⬅️ 返回鍵樣式 */
         .back-btn {
             position: absolute;
-            top: 100px; 
+            top: calc(var(--nav-height) + 26px); 
             left: 40px;
             text-decoration: none;
             color: #ff6a22; 
@@ -150,7 +177,7 @@
         }
 
         .description-layer {
-            background-color: #ffffff; 
+            background-color: rgba(255, 255, 255, 0.94); /* 稍微加入透明度讓粒子透出層次 */
             border-radius: 16px; 
             padding: 45px 50px;
             margin: -40px auto 50px auto; 
@@ -160,6 +187,7 @@
             position: relative;
             z-index: 10; 
             border: 1px solid rgba(0,0,0,0.03);
+            backdrop-filter: blur(8px); /* 配合背景粒子的毛玻璃效果 */
         }
 
         .description-layer p {
@@ -208,6 +236,8 @@
             border: 3px solid #8134df; 
             box-sizing: border-box;
             text-align: center;
+            background-color: rgba(255, 255, 255, 0.85); /* 微微透出背景 */
+            backdrop-filter: blur(5px);
         }
         
         .bottom-text-layer p {
@@ -223,6 +253,7 @@
             width: 100%;
             border: 4px solid #2a2a2a; 
             box-sizing: border-box;
+            background-color: #333;
         }
 
         .bottom-visual-layer img {
@@ -242,6 +273,7 @@
             background-color: rgba(0, 0, 0, 0.85); 
             justify-content: center;
             align-items: center;
+            flex-direction: column; 
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -253,7 +285,7 @@
 
         .lightbox-content {
             max-width: 90%;
-            max-height: 90%;
+            max-height: 80%; 
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             transform: scale(0.8);
@@ -262,6 +294,26 @@
 
         .lightbox.show .lightbox-content {
             transform: scale(1);
+        }
+
+        /* 大圖標題樣式 */
+        .lightbox-caption {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 20px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            transition-delay: 0.1s; 
+            z-index: 2002;
+        }
+
+        .lightbox.show .lightbox-caption {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .close-btn {
@@ -280,13 +332,12 @@
             color: var(--accent-orange);
         }
 
-        /* --- 浮動旋轉圖示樣式 (2個區塊) --- */
+        /* --- 浮動旋轉圖示 與 名字區塊的容器 --- */
         .floating-icons {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%); 
-            /* 稍微加寬，因為圖片變大了，需要多一點空間才不會擠在一起 */
             width: 45%; 
             display: flex;
             justify-content: space-between; 
@@ -300,16 +351,44 @@
             opacity: 1;
         }
 
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; 
+        }
+
+        .icon-name {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+            opacity: 0; 
+            transform: translateY(-5px); 
+            transition: all 0.3s ease;
+        }
+
+        .icon-name.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .float-icon {
-            /* ⭐ 將尺寸大幅增加 */
             width: 140px;
             height: 140px;
-            /* ⭐ 移除白底、圓角與原本的方塊陰影 */
             background-color: transparent; 
             display: flex;
             justify-content: center;
             align-items: center;
             animation: wiggle 1.2s infinite ease-in-out;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .float-icon:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
         }
 
         .icon-2 {
@@ -317,11 +396,9 @@
         }
 
         .float-icon img {
-            /* ⭐ 讓圖片填滿整個 140px 的空間 */
             width: 100%;
             height: 100%;
             object-fit: contain;
-            /* ⭐ 幫圖片本身的輪廓加上陰影，確保在黑色背景下也能看清楚 */
             filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
         }
 
@@ -333,7 +410,13 @@
 
         /* RWD: 手機版適應 */
         @media (max-width: 768px) {
-            body { padding-top: 130px; }
+            :root {
+                --nav-height: 92px; /* 手機版導覽列高度調整 */
+            }
+
+            body { 
+                padding-top: calc(var(--nav-height) + 20px); 
+            }
             .mobile-menu-btn { display: block; }
             .nav-links {
                 position: absolute;
@@ -352,20 +435,25 @@
             }
             .nav-links.active { max-height: 300px; padding: 1.5rem 0; }
             .nav-links a { margin: 0.8rem 0; font-size: 1.1rem; }
-            .back-btn { top: 85px; left: 20px; font-size: 0.95rem; padding: 8px 16px; }
+            .back-btn { top: calc(var(--nav-height) + 15px); left: 20px; font-size: 0.95rem; padding: 8px 16px; }
             h1.game-title { font-size: 3.5rem; }
             .description-layer { width: 95%; padding: 30px 20px; margin-top: -20px; }
             .gallery-layer { grid-template-columns: 1fr; }
             .bottom-text-layer { margin-top: 30px; padding: 10px; }
             .bottom-text-layer p { font-size: 0.95rem; }
             
-            /* 手機版浮動圖示調整 */
-            .float-icon { width: 90px; height: 90px; } 
-            .floating-icons { width: 70%; }
+            .lightbox-caption { font-size: 1.1rem; margin-top: 15px; }
+            .float-icon { width: 80px; height: 80px; } 
+            .floating-icons { width: 75%; }
+            .icon-name { font-size: 0.9rem; gap: 8px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="particle-background">
+        <iframe src="particile.html" title="particle background"></iframe>
+    </div>
 
     <nav>
         <div class="nav-container">
@@ -402,21 +490,21 @@
         </div>
 
         <div class="gallery-layer">
-            <img src="./pict/4 (1).png" alt="場景 1" 
-                 data-icon1="./pict/mon (2).png" 
-                 data-icon2="./pict/mon (6).png">
+            <img src="./pict/4 (1).png" alt="天空雲朵場景" 
+                 data-icon1="./pict/scene1-icon1.png" data-icon1-name="調皮雲精靈"
+                 data-icon2="./pict/scene1-icon2.png" data-icon2-name="星空糖果">
             
-            <img src="./pict/4 (2).png" alt="場景 2" 
-                 data-icon1="./pict/scene2-icon1.png" 
-                 data-icon2="./pict/scene2-icon2.png">
+            <img src="./pict/4 (2).png" alt="南瓜墓園場景" 
+                 data-icon1="./pict/scene2-icon1.png" data-icon1-name="萬聖南瓜王"
+                 data-icon2="./pict/scene2-icon2.png" data-icon2-name="呆萌骷髏頭">
             
-            <img src="./pict/4 (3).png" alt="場景 3" 
-                 data-icon1="./pict/scene3-icon1.png" 
-                 data-icon2="./pict/scene3-icon2.png">
+            <img src="./pict/4 (3).png" alt="迷幻蘑菇森林" 
+                 data-icon1="./pict/scene3-icon1.png" data-icon1-name="發光蘑菇"
+                 data-icon2="./pict/scene3-icon2.png" data-icon2-name="鬼火精靈">
             
-            <img src="./pict/4 (4).png" alt="場景 4" 
-                 data-icon1="./pict/scene4-icon1.png" 
-                 data-icon2="./pict/scene4-icon2.png">
+            <img src="./pict/4 (4).png" alt="破窗神秘廢墟" 
+                 data-icon1="./pict/scene4-icon1.png" data-icon1-name="破舊石像"
+                 data-icon2="./pict/scene4-icon2.png" data-icon2-name="吸血蝙蝠">
         </div>
 
         <div class="bottom-text-layer">
@@ -437,12 +525,21 @@
         
         <img id="lightbox-img" class="lightbox-content" src="">
         
+        <div id="lightbox-caption" class="lightbox-caption"></div>
+        
         <div class="floating-icons">
-            <div class="float-icon icon-1">
-                <img id="lightbox-icon1" src="" alt="Left Icon"> 
+            <div class="icon-wrapper">
+                <div class="float-icon icon-1" id="icon-btn-1">
+                    <img id="lightbox-icon1" src="" alt="Left Icon"> 
+                </div>
+                <div id="lightbox-icon1-name" class="icon-name"></div>
             </div>
-            <div class="float-icon icon-2">
-                <img id="lightbox-icon2" src="" alt="Right Icon"> 
+            
+            <div class="icon-wrapper">
+                <div class="float-icon icon-2" id="icon-btn-2">
+                    <img id="lightbox-icon2" src="" alt="Right Icon"> 
+                </div>
+                <div id="lightbox-icon2-name" class="icon-name"></div>
             </div>
         </div>
     </div>
@@ -451,7 +548,6 @@
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
 
-        // 手機版漢堡選單邏輯
         mobileMenuBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
             
@@ -465,11 +561,17 @@
             }
         });
 
-        // 圖片放大 (Lightbox) 邏輯
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption'); 
+        
         const lbIcon1 = document.getElementById('lightbox-icon1');
+        const lbIcon1Name = document.getElementById('lightbox-icon1-name'); 
+        const iconBtn1 = document.getElementById('icon-btn-1'); 
+        
         const lbIcon2 = document.getElementById('lightbox-icon2');
+        const lbIcon2Name = document.getElementById('lightbox-icon2-name'); 
+        const iconBtn2 = document.getElementById('icon-btn-2'); 
         
         const galleryImages = document.querySelectorAll('.gallery-layer img');
         const closeBtn = document.querySelector('.close-btn');
@@ -478,13 +580,30 @@
             img.addEventListener('click', () => {
                 lightbox.classList.add('show'); 
                 
-                // 1. 替換背景大圖
+                // 1. 替換背景大圖與大圖名稱
                 lightboxImg.src = img.src;      
+                lightboxCaption.textContent = img.alt; 
                 
-                // 2. 替換對應的兩個獨立小圖示
+                // 2. 替換對應的小圖示圖片
                 lbIcon1.src = img.getAttribute('data-icon1');
                 lbIcon2.src = img.getAttribute('data-icon2');
+
+                // 3. 替換對應的小圖示名字，並預設先移除 .active 讓名字隱藏
+                lbIcon1Name.textContent = img.getAttribute('data-icon1-name') || '';
+                lbIcon2Name.textContent = img.getAttribute('data-icon2-name') || '';
+                lbIcon1Name.classList.remove('active'); 
+                lbIcon2Name.classList.remove('active');
             });
+        });
+
+        iconBtn1.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            lbIcon1Name.classList.toggle('active');
+        });
+
+        iconBtn2.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            lbIcon2Name.classList.toggle('active');
         });
 
         closeBtn.addEventListener('click', () => {
