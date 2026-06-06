@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PET CARE - App 介紹</title>
+    <title>讀書計時器</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -98,7 +98,6 @@
             transition: var(--transition);
         }
 
-        /* 以下為你原有的 CSS，完全未更動 */
         .particle-background {
             position: fixed;
             inset: 0;
@@ -138,7 +137,6 @@
 
         .back-btn {
             position: fixed;
-            /* 微調：往下移一點避開導覽列 */
             top: 100px; 
             left: 40px;
             text-decoration: none;
@@ -169,7 +167,7 @@
         }
 
         .hero-title {
-            color: #f27127;
+            color: #3127f2;
             font-size: 5rem;
             font-weight: 900;
             font-family: 'Inter', sans-serif;
@@ -185,7 +183,7 @@
             background: rgba(255, 255, 255, 0.86);
             border-radius: 26px;
             box-shadow: 0 18px 36px rgba(54, 45, 31, 0.08);
-            border-left: 8px solid #f27127;
+            border-left: 8px solid #3127f2;
             backdrop-filter: blur(8px);
         }
 
@@ -194,7 +192,7 @@
             align-items: center;
             gap: 8px;
             margin-bottom: 12px;
-            color: #f27127;
+            color: #3127f2;
             font-size: 0.95rem;
             font-weight: 900;
         }
@@ -271,7 +269,7 @@
         .asset-image-wrap img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             display: block;
             transition: transform 0.25s ease;
         }
@@ -339,7 +337,7 @@
             min-height: 34px;
             padding: 0 11px 0 10px;
             box-sizing: border-box;
-            background: #ffd426;
+            background: #2771f2;
             border-radius: 999px;
             color: #fff;
             font-weight: 900;
@@ -445,7 +443,7 @@
             width: 74px;
             height: 120px;
             border: none;
-            background: rgba(242, 113, 39, 0.58);
+            background: rgba(39, 130, 242, 0.58);
             color: #fff;
             font-size: 2.4rem;
             cursor: pointer;
@@ -458,7 +456,7 @@
         }
 
         .carousel-btn:hover {
-            background: rgba(242, 113, 39, 0.78);
+            background: rgba(39, 39, 242, 0.78);
             transform: translateY(-50%) scale(1.04);
         }
 
@@ -568,7 +566,6 @@
             to { opacity: 1; transform: translate(-50%, -50%); }
         }
 
-        /* 圖片放大模態視窗 - 調高 z-index 確保在導覽列上方 */
         .image-modal {
             position: fixed;
             inset: 0;
@@ -608,7 +605,116 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* 新增：手機版樣式適配 */
+        /* =========================================
+           🚀 響應式動態內嵌網站區塊
+           ========================================= */
+        .preview-wrapper {
+            width: 100%;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .preview-title {
+            color: #3127f2; /* 💡 更新：配合專案的主色調藍色 */
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .desktop-preview { display: block; }
+        .mobile-preview { display: none; }
+
+        .desktop-iframe-container {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .iframe-header {
+            background-color: #f1f5f9;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .iframe-header .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .dot.red { background-color: #ff5f56; }
+        .dot.yellow { background-color: #ffbd2e; }
+        .dot.green { background-color: #27c93f; }
+
+        .iframe-header .external-link {
+            margin-left: auto;
+            color: var(--text-muted);
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+        .iframe-header .external-link:hover {
+            color: #3127f2;
+            transform: scale(1.1);
+        }
+
+        .desktop-iframe-container iframe {
+            width: 100%;
+            height: 650px; 
+            display: block;
+            border: none;
+            background-color: #ffffff;
+        }
+
+        .mobile-iframe-container {
+            width: 320px;
+            height: 650px;
+            margin: 0 auto;
+            border-radius: 40px;
+            border: 12px solid #111111;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            position: relative;
+            background-color: #ffffff;
+            overflow: hidden; 
+        }
+
+        .mobile-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 24px;
+            background-color: #111111;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 10;
+        }
+
+        .mobile-home-bar {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            z-index: 10;
+            pointer-events: none; 
+        }
+
+        .mobile-iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+            background-color: #ffffff;
+        }
+
+        /* RWD: 手機版樣式適配 */
         @media (max-width: 768px) {
             :root {
                 --nav-height: 92px;
@@ -627,7 +733,6 @@
                 font-size: 1.3rem;
             }
             
-            /* 啟動手機版導覽列模式 */
             .mobile-menu-btn {
                 display: block;
             }
@@ -656,7 +761,7 @@
             .nav-links a {
                 margin: 0.8rem 0;
                 font-size: 1.1rem;
-                margin-left: 0; /* 覆蓋桌機版設定 */
+                margin-left: 0;
             }
 
             .back-btn {
@@ -665,7 +770,6 @@
                 padding: 8px 16px;
             }
 
-            /* 以下為你原有的 RWD，未更動 */
             .bg-visible-section,
             .bg-solid-section {
                 padding: 80px 16px 40px;
@@ -823,6 +927,11 @@
                 from { opacity: 0; transform: translateY(24px); }
                 to { opacity: 1; transform: translateY(0); }
             }
+
+            .desktop-preview { display: none; }
+            .mobile-preview { display: block; }
+            .mobile-iframe-container { width: 300px; height: 620px; }
+            .preview-title { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -857,9 +966,9 @@
         <div class="section-inner">
             <div class="hero">
                 <div class="main-phone">
-                    <img src="./pict/image 19.png" alt="Petcare 首頁">
+                    <img src="./pict/image 19.png" alt="讀書計時器 首頁">
                 </div>
-                <div class="hero-title">PET<br>CARE</div>
+                <div class="hero-title">讀書計時器</div>
             </div>
 
             <div class="description">
@@ -1091,6 +1200,43 @@
         </div>
     </section>
 
+    <section class="bg-visible-section">
+        <div class="section-inner">
+            <div class="preview-wrapper">
+                
+                <div class="desktop-preview">
+                    <div class="preview-title">💻 Figma 動態預覽</div>
+                    <div class="desktop-iframe-container">
+                        <div class="iframe-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <a href="https://www.figma.com/proto/4d9XfTAHSZfWSSaDvMuPlJ/%E5%85%AC%E8%BB%8Aapp?t=6HWiRsQ8gsI4ikV4-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&node-id=239-205&starting-point-node-id=239%3A205" target="_blank" class="external-link" title="在新視窗開啟 Figma">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
+                        <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2F4d9XfTAHSZfWSSaDvMuPlJ%2F%25E5%2585%25AC%25E8%25BB%258Aapp%3Ft%3D6HWiRsQ8gsI4ikV4-1%26scaling%3Dscale-down%26content-scaling%3Dfixed%26page-id%3D0%253A1%26node-id%3D239-205%26starting-point-node-id%3D239%253A205&hide-ui=1" title="桃園等公車 - Figma 桌機版預覽" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="mobile-preview">
+                    <div class="preview-title">📱 Figma 動態預覽</div>
+                    <div class="mobile-iframe-container">
+                        <div class="mobile-notch"></div> 
+                        <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2F4d9XfTAHSZfWSSaDvMuPlJ%2F%25E5%2585%25AC%25E8%25BB%258Aapp%3Ft%3D6HWiRsQ8gsI4ikV4-1%26scaling%3Dscale-down%26content-scaling%3Dfixed%26page-id%3D0%253A1%26node-id%3D239-205%26starting-point-node-id%3D239%253A205&hide-ui=1" title="桃園等公車 - Figma 手機版預覽" allowfullscreen></iframe>
+                        <div class="mobile-home-bar"></div> 
+                    </div>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <a href="https://www.figma.com/proto/4d9XfTAHSZfWSSaDvMuPlJ/%E5%85%AC%E8%BB%8Aapp?t=6HWiRsQ8gsI4ikV4-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&node-id=239-205&starting-point-node-id=239%3A205" target="_blank" style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600;">
+                            在新分頁開啟全螢幕 <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <div class="image-modal" id="imageModal" aria-hidden="true">
         <div class="image-modal-content">
             <img id="modalImage" src="" alt="">
@@ -1098,7 +1244,6 @@
     </div>
 
     <script>
-        // 你原有的 Carousel 與 Modal 邏輯，完全未更動
         const carousel = document.querySelector('#carousel');
         const phones = document.querySelectorAll('.small-phone');
         const prevBtn = document.querySelector('.carousel-btn-left');
@@ -1218,7 +1363,6 @@
 
         updateCarousel();
 
-        // ===== 處理手機版導覽列展開/收合的 JavaScript (新增功能) =====
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
 
