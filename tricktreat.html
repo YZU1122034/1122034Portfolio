@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 新增：讓整個網頁的錨點跳轉變成平滑捲動 --- */
+        /* --- 讓整個網頁的錨點跳轉變成平滑捲動 --- */
         html {
             scroll-behavior: smooth;
         }
 
         /* 定義主頁使用的色彩變數，讓導覽列色彩一致 */
         :root {
-            --nav-height: 74px; /* 新增導覽列高度變數 */
+            --nav-height: 74px; 
             --accent-blue: #1275ff;
             --accent-orange: #ff8d30;
             --text-muted: #475569;
@@ -24,11 +24,9 @@
 
         /* 全域設定與底色 */
         body {
-            /* 背景色交由底層的 particle-background 處理，確保粒子可見 */
             background-color: transparent; 
             font-family: 'Inter', "Noto Sans TC", "Microsoft JhengHei", sans-serif;
             margin: 0;
-            /* 套用變數高度，並保留下方 padding */
             padding: calc(var(--nav-height) + 40px) 20px 60px 20px; 
             display: flex;
             flex-direction: column;
@@ -39,14 +37,14 @@
             overflow-x: hidden;
         }
 
-        /* --- 新增：粒子動態背景區塊 --- */
+        /* --- 粒子動態背景區塊 --- */
         .particle-background {
             position: fixed;
             inset: 0;
             z-index: -2;
             pointer-events: none;
             overflow: hidden;
-            background: #f3f0e2; /* 保留 Trick or Treat 原本的奶油米黃底色 */
+            background: #f3f0e2; 
         }
 
         .particle-background iframe {
@@ -177,7 +175,7 @@
         }
 
         .description-layer {
-            background-color: rgba(255, 255, 255, 0.94); /* 稍微加入透明度讓粒子透出層次 */
+            background-color: rgba(255, 255, 255, 0.94); 
             border-radius: 16px; 
             padding: 45px 50px;
             margin: -40px auto 50px auto; 
@@ -187,7 +185,7 @@
             position: relative;
             z-index: 10; 
             border: 1px solid rgba(0,0,0,0.03);
-            backdrop-filter: blur(8px); /* 配合背景粒子的毛玻璃效果 */
+            backdrop-filter: blur(8px); 
         }
 
         .description-layer p {
@@ -236,7 +234,7 @@
             border: 3px solid #8134df; 
             box-sizing: border-box;
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.85); /* 微微透出背景 */
+            background-color: rgba(255, 255, 255, 0.85); 
             backdrop-filter: blur(5px);
         }
         
@@ -259,6 +257,46 @@
         .bottom-visual-layer img {
             width: 100%;
             display: block;
+        }
+
+        /* --- ⭐ 新增：遊戲影片區塊 --- */
+        .video-section {
+            width: 100%;
+            margin-top: 60px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        .video-title {
+            color: #ff6a22;
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+        }
+
+        .video-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* 強制保持影片 16:9 比例 */
+            border: 6px solid #8134df; /* 呼應主視覺的紫色邊框 */
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            background-color: #000;
+            box-sizing: border-box;
+        }
+
+        .video-wrapper iframe,
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
         }
 
         /* --- Lightbox 圖片放大遮罩樣式 --- */
@@ -411,7 +449,7 @@
         /* RWD: 手機版適應 */
         @media (max-width: 768px) {
             :root {
-                --nav-height: 92px; /* 手機版導覽列高度調整 */
+                --nav-height: 92px; 
             }
 
             body { 
@@ -442,6 +480,11 @@
             .bottom-text-layer { margin-top: 30px; padding: 10px; }
             .bottom-text-layer p { font-size: 0.95rem; }
             
+            /* ⭐ 手機版影片區塊適配 */
+            .video-section { margin-top: 40px; }
+            .video-title { font-size: 1.6rem; margin-bottom: 15px; }
+            .video-wrapper { border-width: 4px; border-radius: 12px; }
+
             .lightbox-caption { font-size: 1.1rem; margin-top: 15px; }
             .float-icon { width: 80px; height: 80px; } 
             .floating-icons { width: 75%; }
@@ -451,6 +494,7 @@
 </head>
 <body>
 
+    <!-- 粒子動態背景 -->
     <div class="particle-background">
         <iframe src="particile.html" title="particle background"></iframe>
     </div>
@@ -518,8 +562,21 @@
             <img src="./pict/4 (5).png" alt="遊戲實機畫面展示">
         </div>
 
+        <!-- ⭐ 新增：觀看遊戲影片區塊 -->
+        <div class="video-section">
+            <div class="video-title">觀看遊戲影片</div>
+            <div class="video-wrapper">
+                <!-- 
+                    ⭐ 請將下方的 src 替換為你的 Youtube 嵌入網址，
+                    或是直接用 <video src="./your-video.mp4" controls autoplay muted loop></video> 取代 iframe 
+                -->
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Trick or Treat 遊戲展示影片" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+
     </div>
 
+    <!-- 圖片放大遮罩 (Lightbox) -->
     <div id="lightbox" class="lightbox">
         <span class="close-btn">&times;</span>
         
