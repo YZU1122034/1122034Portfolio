@@ -176,7 +176,7 @@
             flex-direction: column;
         }
 
-        /* 圖片共用相框質感 */
+        /* 圖片共用相框質感 & 加入游標提示設定 */
         .collage-wrapper img {
             border: 5px solid #ffffff; 
             border-radius: 8px;
@@ -185,12 +185,14 @@
             object-fit: cover;
             position: relative;
             background-color: #e2e8f0; 
+            cursor: pointer; /* 加入點擊游標 */
         }
 
+        /* 調整 hover 放大的比例，讓效果更明顯 */
         .collage-wrapper img:hover {
-            transform: translateY(-8px) scale(1.03);
+            transform: translateY(-8px) scale(1.08); /* 從 1.03 改為 1.08 */
             z-index: 50 !important;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
         }
 
         /* ======= 第一組排版：左上 ＋ 右下 ======= */
@@ -336,6 +338,89 @@
             border: none;
         }
 
+        /* =========================================
+           🔍 圖片互動效果：提示字與點擊放大燈箱
+           ========================================= */
+
+        /* 游標懸浮時的文字提示 (Tooltip) */
+        .img-tooltip {
+            position: absolute;
+            background: rgba(17, 17, 17, 0.85);
+            backdrop-filter: blur(4px);
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            pointer-events: none; /* 避免干擾游標 */
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 10000;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* 圖片被點擊後的燈箱 (Lightbox) */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 75vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            object-fit: contain;
+        }
+
+        .lightbox.active img {
+            transform: scale(1);
+        }
+
+        .lightbox .caption {
+            color: #ff8d30;
+            margin-top: 24px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .lightbox .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: #ffffff;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox .close-btn:hover {
+            color: #ff8d30;
+            transform: scale(1.1);
+        }
+
         /* RWD: 手機版適應 (螢幕寬度小於 768px 時切換) */
         @media (max-width: 768px) {
             :root {
@@ -403,7 +488,7 @@
 
         <div class="collage-wrapper">
             <img class="g1-img-1" src="./pict/eat1.png" alt="給我吃一口首頁">
-            <img class="g1-img-2" src="./pict/eat2.png" alt="餐點菜單">
+            <img class="g1-img-2" src="./pict/eat2.png" alt="餐點搜尋">
         </div>
         <div class="text-block">
             有別於傳統的條列式菜單，本網站最大的特色在於著重「參與感與決策趣味性」。透過內建的互動小遊戲，幫助使用者以輕鬆、具娛樂性的方式決定今天的餐點。
@@ -419,8 +504,8 @@
 
         <div class="collage-wrapper">
             <img class="g3-img-1" src="./pict/eat5.png" alt="餐廳列表">
-            <img class="g3-img-2" src="./pict/eat6.png" alt="餐廳詳細資料">
-            <img class="g3-img-3" src="./pict/eat7.png" alt="餐點詳細與購物車">
+            <img class="g3-img-2" src="./pict/eat6.png" alt="餐點詳細資料">
+            <img class="g3-img-3" src="./pict/eat7.png" alt="購物車">
         </div>
         <div class="text-block" style="margin-bottom: 20px;">
             整合了店家與餐點的詳細資料，使用者可以在此瀏覽該餐廳的所有菜色。介面提供加減按鈕來選擇數量，並具備完整的購物車檢視功能，方便使用者確認總價格並進行結帳或取消。
@@ -462,6 +547,9 @@
     </div>
 
     <script>
+        // =========================================
+        // 📱 原有的手機版導覽列選單邏輯
+        // =========================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
 
@@ -475,6 +563,67 @@
             } else {
                 icon.classList.remove('fa-xmark');
                 icon.classList.add('fa-bars');
+            }
+        });
+
+        // =========================================
+        // 🚀 新增：圖片懸浮提示與點擊燈箱功能
+        // =========================================
+
+        // 動態建立 Tooltip 元素並加入畫面
+        const tooltip = document.createElement('div');
+        tooltip.className = 'img-tooltip';
+        document.body.appendChild(tooltip);
+
+        // 動態建立 Lightbox 元素並加入畫面
+        const lightbox = document.createElement('div');
+        lightbox.className = 'lightbox';
+        lightbox.innerHTML = `
+            <i class="fa-solid fa-xmark close-btn"></i>
+            <img src="" alt="">
+            <div class="caption"></div>
+        `;
+        document.body.appendChild(lightbox);
+
+        const lightboxImg = lightbox.querySelector('img');
+        const lightboxCaption = lightbox.querySelector('.caption');
+        const collageImages = document.querySelectorAll('.collage-wrapper img');
+
+        collageImages.forEach(img => {
+            // 1. 滑鼠移入：顯示 Tooltip 並載入 alt 文字
+            img.addEventListener('mouseenter', () => {
+                if (img.alt) {
+                    tooltip.textContent = img.alt;
+                    tooltip.style.opacity = '1';
+                }
+            });
+
+            // 2. 滑鼠移動：Tooltip 跟隨游標
+            img.addEventListener('mousemove', (e) => {
+                // 加上一點偏移量，避免擋住游標本身
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY + 15) + 'px';
+            });
+
+            // 3. 滑鼠移出：隱藏 Tooltip
+            img.addEventListener('mouseleave', () => {
+                tooltip.style.opacity = '0';
+            });
+
+            // 4. 點擊圖片：開啟放大燈箱
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightboxCaption.textContent = img.alt || '未提供圖片說明';
+                lightbox.classList.add('active');
+                tooltip.style.opacity = '0'; // 開啟燈箱時隱藏 tooltip
+            });
+        });
+
+        // 點擊燈箱背景或關閉按鈕時，關閉燈箱
+        lightbox.addEventListener('click', (e) => {
+            // 確保點擊的不是圖片本身才關閉
+            if (e.target !== lightboxImg) {
+                lightbox.classList.remove('active');
             }
         });
     </script>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* 新增：讓整個網頁的錨點跳轉變成平滑捲動 */
+        /* 讓整個網頁的錨點跳轉變成平滑捲動 */
         html {
             scroll-behavior: smooth;
         }
@@ -26,11 +26,11 @@
             background-color: #f3f0e6;
             font-family: "Noto Sans TC", sans-serif;
             margin: 0;
-            /* 新增：頂部 padding 避開固定導覽列 */
+            /* 頂部 padding 避開固定導覽列 */
             padding: var(--nav-height) 0 0 0; 
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative; /* 確保內部絕對定位元件正常運作 */
+            position: relative;
         }
 
         /* 🌐 導覽列樣式 (桌機版) */
@@ -98,7 +98,6 @@
             transition: var(--transition);
         }
 
-        /* 以下為你原有的 CSS */
         .particle-background {
             position: fixed;
             inset: 0;
@@ -138,7 +137,7 @@
 
         .back-btn {
             position: fixed;
-            /* 微調：往下移一點避開導覽列 */
+            /* 往下移一點避開導覽列 */
             top: 100px; 
             left: 40px;
             text-decoration: none;
@@ -208,14 +207,38 @@
             text-align: left;
         }
 
-        .info-grid,
-        .asset-grid {
+        /* 兩欄排版給 info-grid 使用 */
+        .info-grid {
             width: min(100%, 860px);
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 18px;
             align-items: stretch;
+        }
+
+        /* ✨ 針對 5 個卡片的「梅花排版」優化 ✨ */
+        .asset-grid {
+            width: min(100%, 860px);
+            margin: 0 auto;
+            display: grid;
+            /* 分割成 4 等分，以實現完美置中 */
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        /* 上下兩側的 4 張卡片，各佔據 2 等分 */
+        .asset-grid .asset-card:nth-child(1),
+        .asset-grid .asset-card:nth-child(2),
+        .asset-grid .asset-card:nth-child(4),
+        .asset-grid .asset-card:nth-child(5) {
+            grid-column: span 2;
+        }
+
+        /* 中間的第 3 張卡片，從第 2 等分開始，佔據 2 等分 (完美置中) */
+        .asset-grid .asset-card:nth-child(3) {
+            grid-column: 2 / span 2;
         }
 
         .info-card {
@@ -817,6 +840,11 @@
                 gap: 16px;
             }
 
+            /* ✨ 覆寫手機版的梅花排版，讓所有卡片恢復單欄 ✨ */
+            .asset-grid .asset-card:nth-child(n) {
+                grid-column: 1 / -1;
+            }
+
             .info-card,
             .asset-card {
                 height: auto;
@@ -938,7 +966,7 @@
                 to { opacity: 1; transform: translateY(0); }
             }
 
-            /* ✨ 核心切換：手機螢幕下隱藏電腦版，顯示手機版視窗 ✨ */
+            /* 核心切換：手機螢幕下隱藏電腦版，顯示手機版視窗 */
             .desktop-preview { display: none; }
             .mobile-preview { display: block; }
             .mobile-iframe-container { width: 300px; height: 620px; }
@@ -1129,6 +1157,7 @@
     <section class="bg-visible-section">
         <div class="section-inner">
             <div class="asset-grid">
+                <!-- 1. 第一個：同理心地圖 -->
                 <div class="asset-card">
                     <h2 class="asset-title">同理心地圖</h2>
                     <div class="asset-image-wrap">
@@ -1136,6 +1165,7 @@
                     </div>
                 </div>
 
+                <!-- 2. 第二個：icon -->
                 <div class="asset-card">
                     <h2 class="asset-title">icon</h2>
                     <div class="asset-image-wrap">
@@ -1143,6 +1173,15 @@
                     </div>
                 </div>
 
+                <!-- 🌟 3. 第三個：新增的 icon (置中) 🌟 -->
+                <div class="asset-card">
+                    <h2 class="asset-title">icon</h2>
+                    <div class="asset-image-wrap">
+                        <img src="./pict/pet3.png" alt="icon">
+                    </div>
+                </div>
+
+                <!-- 4. 第四個：服務藍圖 -->
                 <div class="asset-card">
                     <h2 class="asset-title">服務藍圖</h2>
                     <div class="asset-image-wrap">
@@ -1150,6 +1189,7 @@
                     </div>
                 </div>
 
+                <!-- 5. 第五個：流程圖 -->
                 <div class="asset-card">
                     <h2 class="asset-title">流程圖</h2>
                     <div class="asset-image-wrap">
