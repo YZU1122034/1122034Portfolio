@@ -8,28 +8,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* --- 讓整個網頁的錨點跳轉變成平滑捲動 --- */
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* 定義主頁使用的色彩變數，讓導覽列色彩一致 */
         :root {
+            --nav-height: 74px; /* 新增導覽列高度變數 */
             --accent-blue: #1275ff;
             --accent-orange: #ff8d30;
             --text-muted: #475569;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 全域設定與波卡圓點背景 */
+        /* 全域設定 */
         body {
-            background-color: #f7f7f7; 
-            background-image: radial-gradient(#d1d1d1 2.5px, transparent 2.5px);
-            background-size: 25px 25px; 
+            /* 背景色交由底層的 particle-background 處理 */
+            background-color: transparent; 
             font-family: 'Inter', "Noto Sans TC", "Microsoft JhengHei", sans-serif;
             margin: 0;
-            /* 頂部增加 padding 避開固定導覽列 */
-            padding: 120px 20px 60px 20px;
+            /* 套用變數高度，並保留下方 padding */
+            padding: calc(var(--nav-height) + 40px) 20px 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             color: #000000;
             position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- 粒子動態背景區塊 --- */
+        .particle-background {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            overflow: hidden;
+            background: #f7f7f7; /* 保留 Element Sigil 原本的淺灰底色 */
+        }
+
+        .particle-background iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
         }
 
         /* 🌐 導覽列樣式 (桌機版) */
@@ -94,7 +118,7 @@
         /* ⬅️ 返回鍵樣式 */
         .back-btn {
             position: absolute;
-            top: 100px; /* 往下調整避開導覽列 */
+            top: calc(var(--nav-height) + 26px); /* 往下調整避開導覽列 */
             left: 40px;
             text-decoration: none;
             color: #333333;
@@ -125,6 +149,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            z-index: 10;
         }
 
         /* 頂部黑色大標題 */
@@ -166,10 +192,16 @@
             text-align: justify; 
             text-align-last: center; 
             margin-bottom: 40px;
-            padding: 0 20px;
+            padding: 20px 30px; 
             font-weight: 700; 
             color: #111111;
             width: 95%;
+            box-sizing: border-box;
+            /* 微透明白底，讓文字在粒子背景上更容易閱讀 */
+            background-color: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
         }
 
         /* 2x2 雙欄圖片網格 */
@@ -181,6 +213,7 @@
             box-sizing: border-box;
             margin-bottom: 40px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            background-color: #ffffff;
         }
 
         .gallery-grid img {
@@ -195,10 +228,50 @@
             box-sizing: border-box;
         }
 
+        /* --- ⭐ 新增：遊戲影片區塊 --- */
+        .video-section {
+            width: 100%;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .video-title {
+            color: #000000;
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            font-family: 'Inter', "Noto Sans TC", sans-serif;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* 強制保持影片 16:9 比例 */
+            border: 2px solid #333333; /* 配合本頁面的細黑框風格 */
+            box-sizing: border-box;
+            background-color: #000000;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .video-wrapper iframe,
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border: none;
+        }
+
         /* RWD: 手機版適應 */
         @media (max-width: 768px) {
+            :root {
+                --nav-height: 92px; /* 手機版導覽列高度調整 */
+            }
+
             body {
-                padding-top: 130px;
+                padding-top: calc(var(--nav-height) + 20px);
             }
             
             /* 📱 啟動手機版導覽列模式 */
@@ -232,7 +305,10 @@
             }
 
             .back-btn {
-                top: 85px; left: 15px; font-size: 0.95rem; padding: 8px 16px;
+                top: calc(var(--nav-height) + 15px); 
+                left: 15px; 
+                font-size: 0.95rem; 
+                padding: 8px 16px;
             }
             h1.game-title {
                 font-size: 2.8rem;
@@ -240,6 +316,8 @@
             }
             .text-block {
                 text-align-last: left; 
+                width: 100%;
+                padding: 20px;
             }
             .gallery-grid {
                 grid-template-columns: 1fr; 
@@ -248,10 +326,18 @@
                 border-right: none;
                 border-bottom: 2px solid #333333;
             }
+
+            /* ⭐ 手機版影片區塊適配 */
+            .video-section { margin-top: 10px; }
+            .video-title { font-size: 1.6rem; margin-bottom: 15px; }
         }
     </style>
 </head>
 <body>
+
+    <div class="particle-background">
+        <iframe src="particile.html" title="particle background"></iframe>
+    </div>
 
     <nav>
         <div class="nav-container">
@@ -298,6 +384,14 @@
             <img src="./pict/lose (3).png" alt="勝利畫面">
             <img src="./pict/lose (1).png" alt="失敗畫面">
         </div>
+
+        <div class="video-section">
+            <div class="video-title">觀看遊戲影片</div>
+            <div class="video-wrapper">
+                <video src="./video/elementsigil.mp4" controls autoplay muted loop></video>             
+            </div>
+        </div>
+
     </div>
 
     <script>
