@@ -8,29 +8,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* --- 讓整個網頁的錨點跳轉變成平滑捲動 --- */
+        html {
+            scroll-behavior: smooth;
+        }
+
         /* 定義導覽列使用的色彩變數 */
         :root {
+            --nav-height: 74px; /* 新增導覽列高度變數 */
             --accent-blue: #1275ff;
             --accent-orange: #ff8d30;
             --text-muted: #475569;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 全域設定與點陣網格背景 */
+        /* 全域設定 */
         body {
-            background-color: #f9f9f9; 
-            background-image: radial-gradient(#d1d1d1 2.5px, transparent 2.5px);
-            background-size: 35px 35px; 
+            /* 背景色交由底層的 particle-background 處理 */
+            background-color: transparent; 
             font-family: 'Inter', "Noto Sans TC", "Microsoft JhengHei", sans-serif;
             margin: 0;
-            /* 頂部增加 padding 避開固定導覽列 */
-            padding: 120px 20px 80px 20px;
+            /* 套用變數高度，並保留下方 padding */
+            padding: calc(var(--nav-height) + 46px) 20px 80px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             color: #111111;
             overflow-x: hidden;
             position: relative;
+            min-height: 100vh;
+        }
+
+        /* --- 新增：粒子動態背景區塊 --- */
+        .particle-background {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            overflow: hidden;
+            background: #f9f9f9; /* 保留原本的淺灰底色 */
+        }
+
+        .particle-background iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
         }
 
         /* 🌐 導覽列樣式 (桌機版) */
@@ -95,7 +118,7 @@
         /* ⬅️ 返回鍵樣式 */
         .back-btn {
             position: absolute;
-            top: 100px; 
+            top: calc(var(--nav-height) + 26px); /* 往下調整避開導覽列 */
             left: 40px;
             text-decoration: none;
             color: #333333;
@@ -127,6 +150,8 @@
             flex-direction: column;
             align-items: center;
             margin-top: 20px;
+            position: relative;
+            z-index: 10;
         }
 
         /* 頂部橘色大標題 */
@@ -188,10 +213,16 @@
             text-align: justify; 
             text-align-last: center; 
             margin-bottom: 80px;
-            padding: 0 20px;
+            padding: 20px 30px; /* 增加一點內距 */
             font-weight: 700; 
             color: #111111;
             width: 95%;
+            box-sizing: border-box;
+            /* 新增微透明白底，讓文字在粒子背景上更容易閱讀 */
+            background-color: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
         }
 
         /* =========================================
@@ -307,7 +338,11 @@
 
         /* RWD: 手機版適應 (螢幕寬度小於 768px 時切換) */
         @media (max-width: 768px) {
-            body { padding-top: 130px; }
+            :root {
+                --nav-height: 92px; /* 手機版導覽列高度 */
+            }
+
+            body { padding-top: calc(var(--nav-height) + 20px); }
             
             .mobile-menu-btn { display: block; }
             .nav-links {
@@ -320,12 +355,12 @@
             .nav-links.active { max-height: 300px; padding: 1.5rem 0; }
             .nav-links a { margin: 0.8rem 0; font-size: 1.1rem; }
 
-            .back-btn { top: 85px; left: 15px; font-size: 0.95rem; padding: 8px 16px; }
+            .back-btn { top: calc(var(--nav-height) + 15px); left: 15px; font-size: 0.95rem; padding: 8px 16px; }
             h1.site-title { font-size: 3rem; margin-top: 30px; margin-bottom: 40px; }
             .collage-wrapper img { width: 90% !important; margin-left: 5% !important; margin-top: -10% !important; margin-bottom: 10px; }
             .g1-img-1, .g2-img-1, .g3-img-1 { margin-top: 0 !important; }
             
-            .text-block { text-align-last: left; padding: 0 15px; margin-bottom: 40px; }
+            .text-block { text-align-last: left; padding: 20px; width: 100%; margin-bottom: 40px; }
 
             /* ✨ 核心切換：手機螢幕下隱藏電腦版，顯示手機版視窗 ✨ */
             .desktop-preview { display: none; }
@@ -337,6 +372,10 @@
     </style>
 </head>
 <body>
+
+    <div class="particle-background">
+        <iframe src="particile.html" title="particle background"></iframe>
+    </div>
 
     <nav>
         <div class="nav-container">
@@ -363,36 +402,32 @@
         <h1 class="site-title">給我吃一口</h1>
 
         <div class="collage-wrapper">
-            <img class="g1-img-1" src="../pict/給我吃一口_頁面_1.jpg" alt="給我吃一口首頁">
-            <img class="g1-img-2" src="../pict/給我吃一口_頁面_2.jpg" alt="餐點菜單">
+            <img class="g1-img-1" src="./pict/eat1.png" alt="給我吃一口首頁">
+            <img class="g1-img-2" src="./pict/eat2.png" alt="餐點菜單">
         </div>
         <div class="text-block">
             有別於傳統的條列式菜單，本網站最大的特色在於著重「參與感與決策趣味性」。透過內建的互動小遊戲，幫助使用者以輕鬆、具娛樂性的方式決定今天的餐點。
         </div>
 
         <div class="collage-wrapper">
-            <img class="g2-img-1" src="../pict/給我吃一口_頁面_3.jpg" alt="記憶翻牌">
-            <img class="g2-img-2" src="../pict/給我吃一口_頁面_4.jpg" alt="命運轉盤">
+            <img class="g2-img-1" src="./pict/eat3.png" alt="記憶翻牌">
+            <img class="g2-img-2" src="./pict/eat4.png" alt="命運轉盤">
         </div>
         <div class="text-block">
             本系統提供兩種互動式餐飲推薦方式：「記憶翻牌」與「命運轉盤」。記憶翻牌透過圖片配對遊戲讓使用者逐步翻開卡片，成功消除所有配對後，即可顯示餐廳或餐點資訊，並提供重新遊玩或前往點餐的選項。「命運轉盤」則以隨機旋轉方式推薦餐廳或餐點，並可選擇重新抽籤或直接前往點餐，增加互動趣味與決策效率。
         </div>
 
         <div class="collage-wrapper">
-            <img class="g3-img-1" src="../pict/給我吃一口_頁面_5.jpg" alt="餐廳列表">
-            <img class="g3-img-2" src="../pict/給我吃一口_頁面_6.jpg" alt="餐廳詳細資料">
-            <img class="g3-img-3" src="../pict/給我吃一口_頁面_7.jpg" alt="餐點詳細與購物車">
+            <img class="g3-img-1" src="./pict/eat5.png" alt="餐廳列表">
+            <img class="g3-img-2" src="./pict/eat6.png" alt="餐廳詳細資料">
+            <img class="g3-img-3" src="./pict/eat7.png" alt="餐點詳細與購物車">
         </div>
         <div class="text-block" style="margin-bottom: 20px;">
             整合了店家與餐點的詳細資料，使用者可以在此瀏覽該餐廳的所有菜色。介面提供加減按鈕來選擇數量，並具備完整的購物車檢視功能，方便使用者確認總價格並進行結帳或取消。
         </div>
 
-        <!-- =========================================
-             🚀 智慧型自動切換內嵌網站區塊
-             ========================================= -->
         <div class="preview-wrapper">
             
-            <!-- 💻 桌機版預覽 (僅在電腦螢幕顯示) -->
             <div class="desktop-preview">
                 <div class="preview-title">💻 網站動態預覽</div>
                 <div class="desktop-iframe-container">
@@ -408,7 +443,6 @@
                 </div>
             </div>
 
-            <!-- 📱 手機版預覽 (僅在手機螢幕顯示) -->
             <div class="mobile-preview">
                 <div class="preview-title">📱 網站動態預覽</div>
                 <div class="mobile-iframe-container">
@@ -416,7 +450,6 @@
                     <iframe src="https://peppy-bonbon-307c82.netlify.app/" title="給我吃一口 - 手機版預覽"></iframe>
                     <div class="mobile-home-bar"></div> 
                 </div>
-                <!-- 給手機用戶的另開視窗按鈕 -->
                 <div style="text-align: center; margin-top: 15px;">
                     <a href="https://peppy-bonbon-307c82.netlify.app/" target="_blank" style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600;">
                         在新分頁開啟全螢幕 <i class="fa-solid fa-arrow-up-right-from-square"></i>
