@@ -206,28 +206,38 @@
             text-align: left;
         }
 
-        /* 兩欄排版給 info-grid 使用 */
-        .info-grid {
+        /* ✨ 6卡片專屬的「雙層梅花排版」(2-1-2-1) ✨ */
+        .info-plum-grid {
             width: min(100%, 860px);
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-            align-items: stretch;
-        }
-
-        /* ✨ 針對 5 個卡片的「梅花排版」優化 ✨ */
-        .asset-grid {
-            width: min(100%, 860px);
-            margin: 0 auto;
-            display: grid;
-            /* 分割成 4 等分，以實現完美置中 */
             grid-template-columns: repeat(4, 1fr);
             gap: 18px;
             align-items: stretch;
         }
 
-        /* 上下兩側的 4 張卡片，各佔據 2 等分 */
+        .info-plum-grid > .info-card:nth-child(1),
+        .info-plum-grid > .info-card:nth-child(2),
+        .info-plum-grid > .info-card:nth-child(4),
+        .info-plum-grid > .info-card:nth-child(5) {
+            grid-column: span 2;
+        }
+
+        .info-plum-grid > .info-card:nth-child(3),
+        .info-plum-grid > .info-card:nth-child(6) {
+            grid-column: 2 / span 2;
+        }
+
+        /* ✨ 5卡片專屬的「單層梅花排版」(2-1-2) ✨ */
+        .asset-grid {
+            width: min(100%, 860px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            align-items: stretch;
+        }
+
         .asset-grid .asset-card:nth-child(1),
         .asset-grid .asset-card:nth-child(2),
         .asset-grid .asset-card:nth-child(4),
@@ -235,7 +245,6 @@
             grid-column: span 2;
         }
 
-        /* 中間的第 3 張卡片，從第 2 等分開始，佔據 2 等分 (完美置中) */
         .asset-grid .asset-card:nth-child(3) {
             grid-column: 2 / span 2;
         }
@@ -827,13 +836,14 @@
                 font-size: 1.05rem;
             }
 
-            .info-grid,
+            /* ✨ 覆寫手機版排版，讓所有卡片恢復單欄 ✨ */
+            .info-plum-grid,
             .asset-grid {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
 
-            /* ✨ 覆寫手機版的梅花排版，讓所有卡片恢復單欄 ✨ */
+            .info-plum-grid .info-card:nth-child(n),
             .asset-grid .asset-card:nth-child(n) {
                 grid-column: 1 / -1;
             }
@@ -1014,7 +1024,10 @@
 
     <section class="bg-solid-section">
         <div class="section-inner">
-            <div class="info-grid">
+            <!-- ✨ 將 6 張卡片放入專屬的雙層梅花陣型 (2-1-2-1) ✨ -->
+            <div class="info-plum-grid">
+                
+                <!-- 卡片 1 (原) -->
                 <div class="info-card">
                     <h2 class="info-title">設計概念</h2>
                     <p class="info-text">
@@ -1022,12 +1035,11 @@
                     </p>
                 </div>
 
+                <!-- 卡片 2 (原) -->
                 <div class="info-card expert-card">
                     <h2 class="info-title">改善策略</h2>
-
                     <div class="expert-scroll">
                         <div class="expert-list">
-                            
                             <div class="expert-item">
                                 <div class="expert-heading">
                                     <span class="expert-heading-text">立刻做（馬上就能改）</span>
@@ -1039,7 +1051,6 @@
                                     </ul>
                                 </div>
                             </div>
-
                             <div class="expert-item">
                                 <div class="expert-heading">
                                     <span class="expert-heading-text">接下來做（需要時間）</span>
@@ -1051,7 +1062,6 @@
                                     </ul>
                                 </div>
                             </div>
-
                             <div class="expert-item">
                                 <div class="expert-heading">
                                     <span class="expert-heading-text">長期（資料品質）</span>
@@ -1063,14 +1073,13 @@
                                     </ul>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
 
+                <!-- 卡片 3 (恢復原內容) -->
                 <div class="info-card interview-card">
                     <h2 class="info-title">使用者訪談</h2>
-
                     <div class="interview-scroll">
                         <div class="interview-list">
                             <div class="interview-item">
@@ -1082,7 +1091,6 @@
                                     有，用過寵物晶片做身份確認與登記。
                                 </p>
                             </div>
-
                             <div class="interview-item">
                                 <div class="interview-question">
                                     <span class="interview-number">02</span>
@@ -1092,7 +1100,6 @@
                                     通常是在寵物要打預防針或生病時會想到。
                                 </p>
                             </div>
-
                             <div class="interview-item">
                                 <div class="interview-question">
                                     <span class="interview-number">03</span>
@@ -1102,7 +1109,6 @@
                                     希望能即時判斷並處理寵物異常，保障健康。
                                 </p>
                             </div>
-
                             <div class="interview-item">
                                 <div class="interview-question">
                                     <span class="interview-number">04</span>
@@ -1116,12 +1122,50 @@
                     </div>
                 </div>
 
+                <!-- 卡片 4 (恢復原內容) -->
                 <div class="info-card">
                     <h2 class="info-title">問題分析</h2>
                     <p class="info-text">
                         這個 App 廣告過多又干擾操作，公車時間常常不準且會亂跳，加上介面不穩、資料不完整與容易連線逾時，整體使用起來既不可靠也不方便
                     </p>
                 </div>
+
+                <!-- 卡片 5 (新增：可保留之優勢) -->
+                <div class="info-card expert-card">
+                    <h2 class="info-title">可保留之優勢</h2>
+                    <div class="expert-scroll">
+                        <ul style="list-style: none; padding: 0; margin: 0; color: #111; font-size: 0.9rem; font-weight: 700; line-height: 1.6;">
+                            <li style="border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 12px; margin-bottom: 12px;">
+                                App 已有基本路線與使用者基礎，只是體驗差，修起來會回流用戶
+                            </li>
+                            <li style="border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 12px; margin-bottom: 12px;">
+                                有廣告收入可以維運（但位置要調整，不該破壞功能）
+                            </li>
+                            <li>
+                                目前有大量使用者回饋，正是改進的清單來源
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 卡片 6 (新增：最想改善的地方) -->
+                <div class="info-card expert-card">
+                    <h2 class="info-title">最想改善的地方</h2>
+                    <div class="expert-scroll">
+                        <ul style="list-style: none; padding: 0; margin: 0; color: #111; font-size: 0.9rem; font-weight: 700; line-height: 1.6;">
+                            <li style="border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 12px; margin-bottom: 12px;">
+                                能使用的功能太少，想要查什麼還要出去別的App看
+                            </li>
+                            <li style="border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 12px; margin-bottom: 12px;">
+                                廣告太多，有時候要一直看廣告
+                            </li>
+                            <li>
+                                對於公車即時動態不夠明確，把從預訂到達時間改成剩下幾分鐘
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
