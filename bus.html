@@ -206,14 +206,38 @@
             text-align: left;
         }
 
-        .info-grid,
-        .asset-grid {
+        /* 兩欄排版給 info-grid 使用 */
+        .info-grid {
             width: min(100%, 860px);
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 18px;
             align-items: stretch;
+        }
+
+        /* ✨ 針對 5 個卡片的「梅花排版」優化 ✨ */
+        .asset-grid {
+            width: min(100%, 860px);
+            margin: 0 auto;
+            display: grid;
+            /* 分割成 4 等分，以實現完美置中 */
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            align-items: stretch;
+        }
+
+        /* 上下兩側的 4 張卡片，各佔據 2 等分 */
+        .asset-grid .asset-card:nth-child(1),
+        .asset-grid .asset-card:nth-child(2),
+        .asset-grid .asset-card:nth-child(4),
+        .asset-grid .asset-card:nth-child(5) {
+            grid-column: span 2;
+        }
+
+        /* 中間的第 3 張卡片，從第 2 等分開始，佔據 2 等分 (完美置中) */
+        .asset-grid .asset-card:nth-child(3) {
+            grid-column: 2 / span 2;
         }
 
         .info-card {
@@ -615,7 +639,7 @@
         }
 
         .preview-title {
-            color: #3127f2; /* 💡 更新：配合專案的主色調藍色 */
+            color: #3127f2; 
             font-size: 1.5rem;
             font-weight: 900;
             letter-spacing: 2px;
@@ -809,6 +833,11 @@
                 gap: 16px;
             }
 
+            /* ✨ 覆寫手機版的梅花排版，讓所有卡片恢復單欄 ✨ */
+            .asset-grid .asset-card:nth-child(n) {
+                grid-column: 1 / -1;
+            }
+
             .info-card,
             .asset-card {
                 height: auto;
@@ -994,65 +1023,47 @@
                 </div>
 
                 <div class="info-card expert-card">
-                    <h2 class="info-title">專家建議</h2>
+                    <h2 class="info-title">改善策略</h2>
 
                     <div class="expert-scroll">
                         <div class="expert-list">
+                            
                             <div class="expert-item">
                                 <div class="expert-heading">
-                                    <span class="expert-heading-text">建議一</span>
+                                    <span class="expert-heading-text">立刻做（馬上就能改）</span>
                                 </div>
                                 <div class="expert-text">
-                                    <ol>
-                                        <li>
-                                            先確認真正會使用產品的人
-                                            <ul>
-                                                <li>不把「寵物」當成使用者，而是以飼主、照顧者和獸醫為主，重新整理整個使用流程與內容安排。</li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            簡報重點要清楚、不分散
-                                            <ul>
-                                                <li>簡報內容聚焦在問題背景、產品能帶來什麼幫助、主要功能以及成果表現。</li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            操作流程與畫面設計要更細緻
-                                            <ul>
-                                                <li>清楚規劃從開始使用到實際操作的步驟，包含設備連接、操作錯誤提示與互動流程。</li>
-                                            </ul>
-                                        </li>
-                                    </ol>
+                                    <ul>
+                                        <li>取消查時頁面的全螢幕廣告，改放底部橫幅或完全移除</li>
+                                        <li>顯示「最後更新時間」讓使用者知道資料新不新</li>
+                                    </ul>
                                 </div>
                             </div>
 
                             <div class="expert-item">
                                 <div class="expert-heading">
-                                    <span class="expert-heading-text">建議二</span>
+                                    <span class="expert-heading-text">接下來做（需要時間）</span>
                                 </div>
                                 <div class="expert-text">
-                                    <ol>
-                                        <li>
-                                            整體表現不錯，有實用價值
-                                            <ul>
-                                                <li>App 很好上手，畫面清楚，身心狀態分析、留言判斷、成長分析等功能都有實用性。</li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            畫面與操作細節需要調整
-                                            <ul>
-                                                <li>部分圖示不夠直覺，按鈕樣式前後不一致，頁面下方選單也需要保持穩定。</li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            功能安排與使用目的要更清楚
-                                            <ul>
-                                                <li>多隻寵物管理與身心健康主題連結可以再加強，讓產品定位更明確。</li>
-                                            </ul>
-                                        </li>
-                                    </ol>
+                                    <ul>
+                                        <li>加入快取機制（網路不好就顯示上次資料），修自動重試與錯誤提示。</li>
+                                        <li>把路線頁一次顯示「所有站點最近班車」，不用一個一個點</li>
+                                    </ul>
                                 </div>
                             </div>
+
+                            <div class="expert-item">
+                                <div class="expert-heading">
+                                    <span class="expert-heading-text">長期（資料品質）</span>
+                                </div>
+                                <div class="expert-text">
+                                    <ul>
+                                        <li>跟運輸單位拿穩定的即時定位資料，改善到站時間預測</li>
+                                        <li>設計廣告政策：不能影響查時功能、不得自動跳轉外網</li>
+                                    </ul>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -1129,6 +1140,13 @@
                     <h2 class="asset-title">icon</h2>
                     <div class="asset-image-wrap">
                         <img src="./pict/icon.png" alt="icon">
+                    </div>
+                </div>
+
+                <div class="asset-card">
+                    <h2 class="asset-title">新增項目</h2>
+                    <div class="asset-image-wrap">
+                        <img src="./pict/icon.png" alt="新增項目">
                     </div>
                 </div>
 
