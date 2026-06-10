@@ -156,6 +156,7 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             object-fit: cover;
             position: relative;
+            cursor: pointer; /* ✨ 新增：讓游標變成手指，提示可點擊 */
         }
 
         .collage-wrapper img:hover {
@@ -262,62 +263,82 @@
             color: #ffffff;
         }
 
+        /* ✨ 新增：圖片放大 Modal 樣式 */
+        .img-modal {
+            display: flex;
+            visibility: hidden;
+            opacity: 0;
+            position: fixed;
+            z-index: 2000; /* 確保在最上層 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); /* 半透明黑底 */
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            transition: visibility 0s, opacity 0.3s ease;
+        }
+
+        .img-modal.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .img-modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            object-fit: contain;
+        }
+
+        .img-modal.show .img-modal-content {
+            transform: scale(1);
+        }
+
+        .close-img-modal {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            color: #ffffff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 2001;
+        }
+
+        .close-img-modal:hover {
+            color: #f29468;
+        }
+
         /* RWD: 手機版適應 */
         @media (max-width: 768px) {
-            body {
-                padding-top: 130px;
-            }
-            
-            /* 📱 啟動手機版導覽列模式 */
-            .mobile-menu-btn {
-                display: block;
-            }
+            body { padding-top: 130px; }
+            .mobile-menu-btn { display: block; }
             .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(15px);
-                flex-direction: column;
-                align-items: center;
-                padding: 0;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.4s ease-out;
+                position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
+                flex-direction: column; align-items: center; padding: 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-height: 0;
+                overflow: hidden; transition: max-height 0.4s ease-out;
             }
-            .nav-links.active {
-                max-height: 300px;
-                padding: 1.5rem 0;
-            }
-            .nav-links a {
-                margin: 0.8rem 0;
-                font-size: 1.1rem;
-            }
-
+            .nav-links.active { max-height: 300px; padding: 1.5rem 0; }
+            .nav-links a { margin: 0.8rem 0; font-size: 1.1rem; }
             .back-btn { top: 85px; left: 15px; font-size: 0.95rem; padding: 8px 16px; }
             h1.site-title { font-size: 3.5rem; margin-top: 30px; margin-bottom: 40px; }
-            
             .g1-img-qna, .g1-img-dog { width: 95%; align-self: center; margin: 0 0 15px 0; }
             .g2-img-letter { width: 95%; aspect-ratio: auto; }
             .g2-bottom-row { width: 100%; flex-direction: column; align-items: center; margin-top: 15px; gap: 15px; }
             .g2-img-goal, .g2-img-btn { width: 80%; margin-top: 0; }
-            
-            .text-block {
-                text-align-last: left; 
-                padding: 0 15px;
-                margin-bottom: 60px;
-            }
-
-            /* 手機版前往網站按鈕微調 */
-            .visit-btn-container {
-                margin-top: 20px;
-            }
-            .visit-website-btn {
-                font-size: 1.1rem;
-                padding: 14px 35px;
-            }
+            .text-block { text-align-last: left; padding: 0 15px; margin-bottom: 60px; }
+            .visit-btn-container { margin-top: 20px; }
+            .visit-website-btn { font-size: 1.1rem; padding: 14px 35px; }
+            .close-img-modal { top: 15px; right: 25px; font-size: 35px; } /* 手機版縮小叉叉 */
         }
     </style>
 </head>
@@ -348,8 +369,8 @@
         <h1 class="site-title">犬心治</h1>
 
         <div class="collage-wrapper">
-            <img class="g1-img-qna border-dashed" src="../pict/犬心治_頁面_2.jpg" alt="犬心治 常見問題與Q&A" onerror="this.src='https://via.placeholder.com/600x337/fca5a5/ffffff?text=Q%26A+Screen'">
-            <img class="g1-img-dog border-dashed" src="../pict/犬心治_頁面_1.jpg" alt="生病狗狗 Baby 的故事" onerror="this.src='https://via.placeholder.com/700x394/1f2937/ffffff?text=Dog+Story'">
+            <img class="g1-img-qna border-dashed" src="./pict/care1.png" alt="犬心治 常見問題與Q&A" onerror="this.src='https://via.placeholder.com/600x337/fca5a5/ffffff?text=Q%26A+Screen'">
+            <img class="g1-img-dog border-dashed" src="./pict/care2.png" alt="生病狗狗 Baby 的故事" onerror="this.src='https://via.placeholder.com/700x394/1f2937/ffffff?text=Dog+Story'">
         </div>
         
         <div class="text-block">
@@ -357,11 +378,11 @@
         </div>
 
         <div class="collage-wrapper">
-            <img class="g2-img-letter border-solid" src="../pict/犬心治_頁面_3.jpg" alt="給捐贈者的一封信" onerror="this.src='https://via.placeholder.com/600x450/fdba74/ffffff?text=Donation+Letter'">
+            <img class="g2-img-letter border-solid" src="./pict/care3.png" alt="給捐贈者的一封信" onerror="this.src='https://via.placeholder.com/600x450/fdba74/ffffff?text=Donation+Letter'">
             
             <div class="g2-bottom-row">
-                <img class="g2-img-goal border-solid" src="../pict/犬心治_頁面_4.jpg" alt="募款目標進度" onerror="this.src='https://via.placeholder.com/400x400/60a5fa/ffffff?text=Goal+Tracking'">
-                <img class="g2-img-btn border-solid" src="../pict/犬心治_頁面_5.jpg" alt="我要捐款按鈕" onerror="this.src='https://via.placeholder.com/500x375/374151/ffffff?text=Donate+Button'">
+                <img class="g2-img-goal border-solid" src="./pict/care4.png" alt="募款目標進度" onerror="this.src='https://via.placeholder.com/400x400/60a5fa/ffffff?text=Goal+Tracking'">
+                <img class="g2-img-btn border-solid" src="./pict/care5.png" alt="我要捐款按鈕" onerror="this.src='https://via.placeholder.com/500x375/374151/ffffff?text=Donate+Button'">
             </div>
         </div>
         
@@ -375,6 +396,11 @@
             </a>
         </div>
 
+    </div>
+
+    <div id="imgModal" class="img-modal">
+        <span class="close-img-modal">&times;</span>
+        <img class="img-modal-content" id="expandedImg">
     </div>
 
     <script>
@@ -393,6 +419,32 @@
             } else {
                 icon.classList.remove('fa-xmark');
                 icon.classList.add('fa-bars');
+            }
+        });
+
+        // ✨ 新增：圖片放大功能 (Lightbox)
+        const modal = document.getElementById('imgModal');
+        const modalImg = document.getElementById('expandedImg');
+        const closeBtn = document.querySelector('.close-img-modal');
+        const images = document.querySelectorAll('.collage-wrapper img'); // 選取所有需要放大的圖
+
+        // 幫每張圖片加上點擊事件
+        images.forEach(img => {
+            img.addEventListener('click', function() {
+                modal.classList.add('show');
+                modalImg.src = this.src; // 將彈出視窗內的圖片替換成當前點擊的圖片
+            });
+        });
+
+        // 點擊叉叉關閉
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        // 點擊黑色背景也能關閉
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
             }
         });
     </script>
