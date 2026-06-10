@@ -8,32 +8,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* 新增：讓整個網頁的錨點跳轉變成平滑捲動 */
         html {
             scroll-behavior: smooth;
         }
 
-        /* 導覽列變數設定 */
         :root {
             --nav-height: 74px;
-            --accent-blue: #1275ff;
-            --accent-orange: #ff8d30;
+            /* 💡 將主色調改為橘黃色系 */
+            --theme-orange: #FF9F1C; 
+            --theme-yellow: #FFBF69; 
             --text-muted: #475569;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            background-color: #f3f0e6;
+            /* 恢復原本的米白色底 */
+            background-color: #f3f0e6; 
             font-family: "Noto Sans TC", sans-serif;
             margin: 0;
-            /* 新增：頂部 padding 避開固定導覽列 */
             padding: var(--nav-height) 0 0 0; 
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative; /* 確保內部絕對定位元件正常運作 */
+            position: relative; 
         }
 
-        /* 🌐 導覽列樣式 (桌機版) */
+        /* 導覽列樣式 */
         nav {
             position: fixed;
             top: 0;
@@ -61,13 +60,13 @@
             font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: -0.5px;
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-orange));
+            /* 💡 Logo 套用橘黃色漸層 */
+            background: linear-gradient(135deg, var(--theme-orange), var(--theme-yellow));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-decoration: none;
         }
 
-        /* 桌機版導覽連結 */
         .nav-links {
             display: flex;
             align-items: center;
@@ -84,10 +83,10 @@
         }
         
         .nav-links a:hover {
-            color: var(--accent-blue);
+            /* 💡 滑鼠游標懸停時改為橘黃色 */
+            color: var(--theme-orange);
         }
 
-        /* 📱 手機版漢堡選單按鈕 (預設隱藏) */
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -104,7 +103,8 @@
             z-index: -2;
             pointer-events: none;
             overflow: hidden;
-            background: #f3f0e6;
+            /* 恢復原本的米白色底 */
+            background: #f3f0e6; 
         }
 
         .particle-background iframe {
@@ -121,32 +121,10 @@
             position: relative;
         }
 
-        .bg-solid-section {
-            width: 100%;
-            padding: 58px 20px;
-            box-sizing: border-box;
-            background: rgba(243, 240, 230, 0.96);
-            position: relative;
-        }
-
         .section-inner {
             width: 100%;
             max-width: 1100px;
             margin: 0 auto;
-        }
-
-        .back-btn {
-            position: fixed;
-            top: 100px; 
-            left: 40px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 700;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            z-index: 100;
         }
 
         .hero {
@@ -167,7 +145,8 @@
         }
 
         .hero-title {
-            color: #3127f2;
+            /* 💡 標題改為橘黃色 */
+            color: var(--theme-orange);
             font-size: 5rem;
             font-weight: 900;
             font-family: 'Inter', sans-serif;
@@ -183,7 +162,8 @@
             background: rgba(255, 255, 255, 0.86);
             border-radius: 26px;
             box-shadow: 0 18px 36px rgba(54, 45, 31, 0.08);
-            border-left: 8px solid #3127f2;
+            /* 💡 左側裝飾線改為橘黃色 */
+            border-left: 8px solid var(--theme-orange);
             backdrop-filter: blur(8px);
         }
 
@@ -192,7 +172,8 @@
             align-items: center;
             gap: 8px;
             margin-bottom: 12px;
-            color: #3127f2;
+            /* 💡 小標籤文字與 icon 改為橘黃色 */
+            color: var(--theme-orange);
             font-size: 0.95rem;
             font-weight: 900;
         }
@@ -206,512 +187,36 @@
             text-align: left;
         }
 
-        .info-grid,
-        .asset-grid {
-            width: min(100%, 860px);
+        /* 💡 新增：影片展示區塊樣式 */
+        .video-wrapper {
+            max-width: 820px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-            align-items: stretch;
-        }
-
-        .info-card {
-            height: 210px;
-            padding: 24px 28px;
+            padding: 28px 34px 34px;
             box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.94);
-            border-radius: 34px;
-            box-shadow: 0 14px 28px rgba(54, 45, 31, 0.06);
-            overflow: hidden;
-        }
-
-        .asset-card {
-            height: 210px;
-            padding: 18px;
-            box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.88);
-            border-radius: 34px;
-            box-shadow: 0 14px 28px rgba(54, 45, 31, 0.06);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            background: rgba(255, 255, 255, 0.86);
+            border-radius: 26px;
+            box-shadow: 0 18px 36px rgba(54, 45, 31, 0.08);
+            border-left: 8px solid var(--theme-orange);
             backdrop-filter: blur(8px);
         }
 
-        .info-title,
-        .asset-title {
-            margin: 0 0 16px;
-            color: #111;
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1.2;
-            text-align: center;
-        }
-
-        .asset-title {
-            margin-bottom: 12px;
-            font-size: 1.55rem;
-        }
-
-        .asset-image-wrap {
-            flex: 1;
-            min-height: 0;
-            border-radius: 22px;
-            background: #f3f0e6;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: zoom-in;
-        }
-
-        .asset-image-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.25s ease;
-        }
-
-        .asset-image-wrap:hover img {
-            transform: scale(1.04);
-        }
-
-        .info-text {
-            margin: 0;
-            color: #222;
-            font-size: 0.95rem;
-            font-weight: 700;
-            line-height: 1.65;
-            text-align: left;
-        }
-
-        .interview-card,
-        .expert-card {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .interview-card .info-title,
-        .expert-card .info-title {
-            margin-bottom: 10px;
-        }
-
-        .interview-scroll,
-        .expert-scroll {
-            height: 132px;
-            overflow-y: auto;
-            padding-right: 10px;
-            scrollbar-width: thin;
-            scrollbar-color: #9b9b9b transparent;
-        }
-
-        .interview-scroll::-webkit-scrollbar,
-        .expert-scroll::-webkit-scrollbar {
-            width: 7px;
-        }
-
-        .interview-scroll::-webkit-scrollbar-track,
-        .expert-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .interview-scroll::-webkit-scrollbar-thumb,
-        .expert-scroll::-webkit-scrollbar-thumb {
-            background: #9b9b9b;
-            border-radius: 999px;
-        }
-
-        .interview-list,
-        .expert-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .interview-question,
-        .expert-heading {
-            display: flex;
-            align-items: center;
-            min-height: 34px;
-            padding: 0 11px 0 10px;
-            box-sizing: border-box;
-            background: #2771f2;
-            border-radius: 999px;
-            color: #fff;
-            font-weight: 900;
-        }
-
-        .interview-number {
-            flex: 0 0 auto;
-            margin-right: 6px;
-            font-family: "Inter", sans-serif;
-            font-size: 1.1rem;
-            font-weight: 900;
-            line-height: 1;
-        }
-
-        .interview-question-text,
-        .expert-heading-text {
-            font-size: 0.68rem;
-            line-height: 1.18;
-        }
-
-        .interview-answer,
-        .expert-text {
-            margin: 4px 0 0;
-            padding-left: 10px;
-            color: #111;
-            font-size: 0.68rem;
-            font-weight: 900;
-            line-height: 1.35;
-        }
-
-        .expert-text ol {
-            margin: 0;
-            padding-left: 16px;
-        }
-
-        .expert-text li {
-            margin-bottom: 5px;
-        }
-
-        .expert-text ul {
-            margin: 2px 0 0;
-            padding-left: 14px;
-        }
-
-        .showcase {
-            width: 100%;
-            height: 500px;
+        .video-container {
             position: relative;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .showcase.detail-open {
-            height: 420px;
-            overflow: visible;
-        }
-
-        .small-phone {
-            width: 200px;
-            position: absolute;
-            cursor: default;
-            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.2));
-            pointer-events: none;
-            --x: 0px;
-            --s: 1;
-            --o: 1;
-            transform: translateX(var(--x)) scale(var(--s));
-            opacity: var(--o);
-            transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.85s ease, filter 0.85s ease;
-        }
-
-        .small-phone img {
             width: 100%;
-            display: block;
+            padding-bottom: 56.25%; /* 16:9 比例 */
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+            margin-top: 16px;
         }
 
-        .pos-0 { --x: -350px; --s: 0.7; --o: 0.45; z-index: 1; }
-        .pos-1 { --x: -180px; --s: 0.85; --o: 0.75; z-index: 2; }
-        .pos-2 { --x: 0px; --s: 1.12; --o: 1; z-index: 10; cursor: pointer; pointer-events: auto; }
-        .pos-3 { --x: 180px; --s: 0.85; --o: 0.75; z-index: 2; }
-        .pos-4 { --x: 350px; --s: 0.7; --o: 0.45; z-index: 1; }
-
-        .pos-2:hover {
-            transform: translateX(var(--x)) scale(calc(var(--s) * 1.04));
-            filter: drop-shadow(0 22px 28px rgba(0,0,0,0.28));
-            z-index: 20;
-        }
-
-        .pos-2 img {
-            animation: phoneFloat 2.8s ease-in-out infinite;
-        }
-
-        @keyframes phoneFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            width: 74px;
-            height: 120px;
-            border: none;
-            background: rgba(39, 130, 242, 0.58);
-            color: #fff;
-            font-size: 2.4rem;
-            cursor: pointer;
-            z-index: 50;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
-        }
-
-        .carousel-btn:hover {
-            background: rgba(39, 39, 242, 0.78);
-            transform: translateY(-50%) scale(1.04);
-        }
-
-        .carousel-btn:active {
-            transform: translateY(-50%) scale(0.96);
-        }
-
-        .carousel-btn-left { left: 70px; }
-        .carousel-btn-right { right: 70px; }
-        .carousel-btn i { pointer-events: none; }
-
-        .inline-detail {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: min(920px, calc(100% - 80px));
-            min-height: 374px;
-            background: transparent;
-            transform: translate(-50%, -50%);
-            display: none;
-            align-items: center;
-            gap: 46px;
-            padding: 0 58px 0 0;
-            box-sizing: border-box;
-            z-index: 40;
-            animation: detailOpen 0.45s ease both;
-        }
-
-        .inline-detail::before {
-            content: "";
+        .video-container iframe {
             position: absolute;
             top: 0;
-            right: 0;
-            bottom: 0;
-            left: 110px;
-            background: #fff;
-            border-radius: 0 36px 36px 0;
-            z-index: -1;
-        }
-
-        .inline-detail.active {
-            display: flex;
-        }
-
-        .inline-detail-phone {
-            width: 220px;
-            flex: 0 0 auto;
-            margin-left: -8px;
-            filter: drop-shadow(0 12px 18px rgba(0,0,0,0.18));
-            z-index: 2;
-        }
-
-        .inline-detail-phone img {
-            width: 100%;
-            display: block;
-        }
-
-        .inline-detail-content {
-            flex: 1;
-            color: #111;
-            padding-top: 8px;
-            z-index: 2;
-        }
-
-        .inline-detail-title {
-            margin: 0 0 56px;
-            font-family: "Inter", "Noto Sans TC", sans-serif;
-            font-size: 3.2rem;
-            font-weight: 900;
-            line-height: 1;
-        }
-
-        .inline-detail-text {
-            margin: 0;
-            max-width: 580px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            line-height: 1.55;
-        }
-
-        .inline-detail-text strong {
-            font-weight: 900;
-        }
-
-        .close-detail {
-            position: absolute;
-            top: 18px;
-            right: 22px;
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: transparent;
-            color: #222;
-            font-size: 1.4rem;
-            cursor: pointer;
-            z-index: 3;
-        }
-
-        .showcase.detail-open .small-phone,
-        .showcase.detail-open .carousel-btn {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        @keyframes detailOpen {
-            from { opacity: 0; transform: translate(-46%, -50%); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
-        }
-
-        .image-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 2000; 
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 34px;
-            box-sizing: border-box;
-            background: rgba(0, 0, 0, 0.72);
-            cursor: zoom-out;
-        }
-
-        .image-modal.active {
-            display: flex;
-        }
-
-        .image-modal-content {
-            max-width: min(1100px, 94vw);
-            max-height: 88vh;
-            cursor: default;
-            animation: modalZoom 0.25s ease both;
-        }
-
-        .image-modal-content img {
-            max-width: 100%;
-            max-height: 88vh;
-            display: block;
-            object-fit: contain;
-            border-radius: 18px;
-            background: #fff;
-            box-shadow: 0 24px 70px rgba(0,0,0,0.35);
-        }
-
-        @keyframes modalZoom {
-            from { opacity: 0; transform: scale(0.94); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* =========================================
-           🚀 響應式動態內嵌網站區塊
-           ========================================= */
-        .preview-wrapper {
-            width: 100%;
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
-
-        .preview-title {
-            color: #3127f2; /* 💡 更新：配合專案的主色調藍色 */
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .desktop-preview { display: block; }
-        .mobile-preview { display: none; }
-
-        .desktop-iframe-container {
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            background-color: #ffffff;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .iframe-header {
-            background-color: #f1f5f9;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .iframe-header .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
-        .dot.red { background-color: #ff5f56; }
-        .dot.yellow { background-color: #ffbd2e; }
-        .dot.green { background-color: #27c93f; }
-
-        .iframe-header .external-link {
-            margin-left: auto;
-            color: var(--text-muted);
-            transition: var(--transition);
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
-        .iframe-header .external-link:hover {
-            color: #3127f2;
-            transform: scale(1.1);
-        }
-
-        .desktop-iframe-container iframe {
-            width: 100%;
-            height: 650px; 
-            display: block;
-            border: none;
-            background-color: #ffffff;
-        }
-
-        .mobile-iframe-container {
-            width: 320px;
-            height: 650px;
-            margin: 0 auto;
-            border-radius: 40px;
-            border: 12px solid #111111;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-            position: relative;
-            background-color: #ffffff;
-            overflow: hidden; 
-        }
-
-        .mobile-notch {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 130px;
-            height: 24px;
-            background-color: #111111;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            z-index: 10;
-        }
-
-        .mobile-home-bar {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 4px;
-            background-color: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            z-index: 10;
-            pointer-events: none; 
-        }
-
-        .mobile-iframe-container iframe {
+            left: 0;
             width: 100%;
             height: 100%;
-            display: block;
-            border: none;
-            background-color: #ffffff;
+            border: 0;
         }
 
         /* RWD: 手機版樣式適配 */
@@ -764,14 +269,7 @@
                 margin-left: 0;
             }
 
-            .back-btn {
-                top: calc(var(--nav-height) + 15px);
-                left: 20px;
-                padding: 8px 16px;
-            }
-
-            .bg-visible-section,
-            .bg-solid-section {
+            .bg-visible-section {
                 padding: 80px 16px 40px;
             }
 
@@ -793,7 +291,7 @@
                 width: 190px;
             }
 
-            .description {
+            .description, .video-wrapper {
                 padding: 22px 24px 24px;
                 border-left-width: 6px;
                 border-radius: 22px;
@@ -802,136 +300,6 @@
             .description-text {
                 font-size: 1.05rem;
             }
-
-            .info-grid,
-            .asset-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .info-card,
-            .asset-card {
-                height: auto;
-                min-height: 210px;
-                padding: 26px 24px;
-                border-radius: 28px;
-            }
-
-            .info-title,
-            .asset-title {
-                font-size: 1.65rem;
-                margin-bottom: 14px;
-            }
-
-            .asset-card {
-                min-height: 260px;
-            }
-
-            .interview-scroll,
-            .expert-scroll {
-                height: 160px;
-            }
-
-            .interview-question,
-            .expert-heading {
-                min-height: 48px;
-                padding: 0 16px 0 14px;
-            }
-
-            .interview-number {
-                font-size: 1.5rem;
-            }
-
-            .interview-question-text,
-            .expert-heading-text {
-                font-size: 0.9rem;
-            }
-
-            .interview-answer,
-            .expert-text {
-                padding-left: 0;
-                font-size: 0.88rem;
-            }
-
-            .showcase {
-                height: 320px;
-            }
-
-            .showcase.detail-open {
-                height: auto;
-                min-height: 560px;
-            }
-
-            .small-phone {
-                width: 120px;
-            }
-
-            .pos-0 { --x: -150px; --s: 0.6; }
-            .pos-1 { --x: -80px; --s: 0.75; }
-            .pos-2 { --x: 0px; --s: 1.05; }
-            .pos-3 { --x: 80px; --s: 0.75; }
-            .pos-4 { --x: 150px; --s: 0.6; }
-
-            .carousel-btn {
-                width: 48px;
-                height: 84px;
-                font-size: 1.7rem;
-            }
-
-            .carousel-btn-left { left: 0; }
-            .carousel-btn-right { right: 0; }
-
-            .inline-detail {
-                position: relative;
-                top: auto;
-                left: auto;
-                width: 100%;
-                min-height: auto;
-                transform: none;
-                flex-direction: column;
-                gap: 24px;
-                padding: 28px 24px 32px;
-                border-radius: 28px;
-                text-align: center;
-                animation: mobileDetailOpen 0.45s ease both;
-            }
-
-            .inline-detail::before {
-                left: 0;
-                border-radius: 28px;
-            }
-
-            .inline-detail-phone {
-                width: 180px;
-                margin-left: 0;
-            }
-
-            .inline-detail-title {
-                margin-bottom: 24px;
-                font-size: 2.3rem;
-            }
-
-            .inline-detail-text {
-                font-size: 1rem;
-            }
-
-            .image-modal {
-                padding: 18px;
-            }
-
-            .image-modal-content img {
-                border-radius: 12px;
-            }
-
-            @keyframes mobileDetailOpen {
-                from { opacity: 0; transform: translateY(24px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-
-            .desktop-preview { display: none; }
-            .mobile-preview { display: block; }
-            .mobile-iframe-container { width: 300px; height: 620px; }
-            .preview-title { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -943,7 +311,7 @@
 
     <nav>
         <div class="nav-container">
-            <a href="index.html" class="logo">Portfolio</a>
+            <a href="index.html" class="logo">鍾翔壹</a>
             
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fa-solid fa-bars"></i>
@@ -958,10 +326,6 @@
         </div>
     </nav>
 
-    <a href="index.html" class="back-btn">
-        <i class="fa-solid fa-arrow-left"></i> 返回主頁
-    </a>
-
     <section class="bg-visible-section">
         <div class="section-inner">
             <div class="hero">
@@ -973,7 +337,7 @@
 
             <div class="description">
                 <div class="description-label">
-                    <i class="fa-solid fa-paw"></i>
+                    <i class="fa-solid fa-clock"></i>
                     APP 核心概念
                 </div>
                 <p class="description-text">
@@ -983,386 +347,21 @@
         </div>
     </section>
 
-    <section class="bg-solid-section">
+    <section class="bg-visible-section" style="padding-top: 0;">
         <div class="section-inner">
-            <div class="info-grid">
-                <div class="info-card">
-                    <h2 class="info-title">設計概念</h2>
-                    <p class="info-text">
-                        以寵物陪伴與遠端照護為核心，將監控、紀錄與提醒功能整合在同一個介面中，讓使用者能快速掌握寵物狀態。
-                    </p>
+            <div class="video-wrapper">
+                <div class="description-label">
+                    <i class="fa-solid fa-play"></i>
+                    操作展示影片
                 </div>
-
-                <div class="info-card expert-card">
-                    <h2 class="info-title">專家建議</h2>
-
-                    <div class="expert-scroll">
-                        <div class="expert-list">
-                            <div class="expert-item">
-                                <div class="expert-heading">
-                                    <span class="expert-heading-text">建議一</span>
-                                </div>
-                                <div class="expert-text">
-                                    <ol>
-                                        <li>
-                                            先確認真正會使用產品的人
-                                            <ul>
-                                                <li>不把「寵物」當成使用者，而是以飼主、照顧者和獸醫為主，重新整理整個使用流程與內容安排。</li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            簡報重點要清楚、不分散
-                                            <ul>
-                                                <li>簡報內容聚焦在問題背景、產品能帶來什麼幫助、主要功能以及成果表現。</li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            操作流程與畫面設計要更細緻
-                                            <ul>
-                                                <li>清楚規劃從開始使用到實際操作的步驟，包含設備連接、操作錯誤提示與互動流程。</li>
-                                            </ul>
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-
-                            <div class="expert-item">
-                                <div class="expert-heading">
-                                    <span class="expert-heading-text">建議二</span>
-                                </div>
-                                <div class="expert-text">
-                                    <ol>
-                                        <li>
-                                            整體表現不錯，有實用價值
-                                            <ul>
-                                                <li>App 很好上手，畫面清楚，身心狀態分析、留言判斷、成長分析等功能都有實用性。</li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            畫面與操作細節需要調整
-                                            <ul>
-                                                <li>部分圖示不夠直覺，按鈕樣式前後不一致，頁面下方選單也需要保持穩定。</li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            功能安排與使用目的要更清楚
-                                            <ul>
-                                                <li>多隻寵物管理與身心健康主題連結可以再加強，讓產品定位更明確。</li>
-                                            </ul>
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="info-card interview-card">
-                    <h2 class="info-title">使用者訪談</h2>
-
-                    <div class="interview-scroll">
-                        <div class="interview-list">
-                            <div class="interview-item">
-                                <div class="interview-question">
-                                    <span class="interview-number">01</span>
-                                    <span class="interview-question-text">是否有使用過類似的產品或服務？</span>
-                                </div>
-                                <p class="interview-answer">
-                                    有，用過寵物晶片做身份確認與登記。
-                                </p>
-                            </div>
-
-                            <div class="interview-item">
-                                <div class="interview-question">
-                                    <span class="interview-number">02</span>
-                                    <span class="interview-question-text">平常你在什麼情境會想到要用？</span>
-                                </div>
-                                <p class="interview-answer">
-                                    通常是在寵物要打預防針或生病時會想到。
-                                </p>
-                            </div>
-
-                            <div class="interview-item">
-                                <div class="interview-question">
-                                    <span class="interview-number">03</span>
-                                    <span class="interview-question-text">使用時想達成的目標是什麼？</span>
-                                </div>
-                                <p class="interview-answer">
-                                    希望能即時判斷並處理寵物異常，保障健康。
-                                </p>
-                            </div>
-
-                            <div class="interview-item">
-                                <div class="interview-question">
-                                    <span class="interview-number">04</span>
-                                    <span class="interview-question-text">對這類產品的期待是什麼？</span>
-                                </div>
-                                <p class="interview-answer">
-                                    期待了解寵物無法表達的狀況，並輔助健康觀察。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="info-card">
-                    <h2 class="info-title">使用者回饋</h2>
-                    <p class="info-text">
-                        使用者認為即時查看寵物狀況能降低外出時的不安，也希望介面操作簡單，能快速找到監控、紀錄與提醒功能。
-                    </p>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="APP 操作展示" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
     </section>
-
-    <section class="bg-visible-section">
-        <div class="section-inner">
-            <div class="asset-grid">
-                <div class="asset-card">
-                    <h2 class="asset-title">同理心地圖</h2>
-                    <div class="asset-image-wrap">
-                        <img src="./pict/pet (1).png" alt="同理心地圖">
-                    </div>
-                </div>
-
-                <div class="asset-card">
-                    <h2 class="asset-title">icon</h2>
-                    <div class="asset-image-wrap">
-                        <img src="./pict/icon.png" alt="icon">
-                    </div>
-                </div>
-
-                <div class="asset-card">
-                    <h2 class="asset-title">服務藍圖</h2>
-                    <div class="asset-image-wrap">
-                        <img src="./pict/service-blueprint.png" alt="服務藍圖">
-                    </div>
-                </div>
-
-                <div class="asset-card">
-                    <h2 class="asset-title">流程圖</h2>
-                    <div class="asset-image-wrap">
-                        <img src="./pict/flow-chart.png" alt="流程圖">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-solid-section">
-        <div class="section-inner">
-            <div class="showcase" id="carousel">
-                <button class="carousel-btn carousel-btn-left" type="button" aria-label="向前一張">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-
-                <div class="small-phone pos-0" data-title="XXXXXX" data-text="本app的主旨是讓經常上班不在家，但又因為擔心寵物不在身邊而無法隨時查看狀況而開發的app">
-                    <img src="./pict/image 20.png" alt="畫面 1">
-                </div>
-
-                <div class="small-phone pos-1" data-title="寵物照護" data-text="可以新增寵物資料、查看照護紀錄，讓飼主更清楚掌握寵物日常狀態。">
-                    <img src="./pict/image 21.png" alt="畫面 2">
-                </div>
-
-                <div class="small-phone pos-2" data-title="即時監控" data-text="透過遠端監控功能，即使人在外面，也能查看家中寵物目前的活動狀況。">
-                    <img src="./pict/image 24.png" alt="畫面 3">
-                </div>
-
-                <div class="small-phone pos-3" data-title="智慧鏡頭" data-text="搭配智慧鏡頭功能，幫助使用者更方便觀察寵物，減少不在家時的擔心。">
-                    <img src="./pict/image 29.png" alt="畫面 4">
-                </div>
-
-                <div class="small-phone pos-4" data-title="文章推薦" data-text="提供寵物相關文章與知識內容，讓使用者能學習更多照顧寵物的方法。">
-                    <img src="./pict/image 38.png" alt="畫面 5">
-                </div>
-
-                <button class="carousel-btn carousel-btn-right" type="button" aria-label="向後一張">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-
-                <div class="inline-detail" id="inlineDetail">
-                    <button class="close-detail" type="button" aria-label="關閉介紹">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-
-                    <div class="inline-detail-phone">
-                        <img id="detailImage" src="./pict/image 20.png" alt="詳細畫面">
-                    </div>
-
-                    <div class="inline-detail-content">
-                        <h2 class="inline-detail-title" id="detailTitle">XXXXXX</h2>
-                        <p class="inline-detail-text" id="detailText">
-                            本<strong>app</strong>的主旨是讓經常上班不在家，但又因為擔心寵物不在身邊而無法隨時查看狀況而開發的<strong>app</strong>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-visible-section">
-        <div class="section-inner">
-            <div class="preview-wrapper">
-                
-                <div class="desktop-preview">
-                    <div class="preview-title">💻 Figma 動態預覽</div>
-                    <div class="desktop-iframe-container">
-                        <div class="iframe-header">
-                            <span class="dot red"></span>
-                            <span class="dot yellow"></span>
-                            <span class="dot green"></span>
-                            <a href="https://www.figma.com/proto/4d9XfTAHSZfWSSaDvMuPlJ/%E5%85%AC%E8%BB%8Aapp?t=6HWiRsQ8gsI4ikV4-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&node-id=239-205&starting-point-node-id=239%3A205" target="_blank" class="external-link" title="在新視窗開啟 Figma">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </a>
-                        </div>
-                        <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2F4d9XfTAHSZfWSSaDvMuPlJ%2F%25E5%2585%25AC%25E8%25BB%258Aapp%3Ft%3D6HWiRsQ8gsI4ikV4-1%26scaling%3Dscale-down%26content-scaling%3Dfixed%26page-id%3D0%253A1%26node-id%3D239-205%26starting-point-node-id%3D239%253A205&hide-ui=1" title="桃園等公車 - Figma 桌機版預覽" allowfullscreen></iframe>
-                    </div>
-                </div>
-
-                <div class="mobile-preview">
-                    <div class="preview-title">📱 Figma 動態預覽</div>
-                    <div class="mobile-iframe-container">
-                        <div class="mobile-notch"></div> 
-                        <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2F4d9XfTAHSZfWSSaDvMuPlJ%2F%25E5%2585%25AC%25E8%25BB%258Aapp%3Ft%3D6HWiRsQ8gsI4ikV4-1%26scaling%3Dscale-down%26content-scaling%3Dfixed%26page-id%3D0%253A1%26node-id%3D239-205%26starting-point-node-id%3D239%253A205&hide-ui=1" title="桃園等公車 - Figma 手機版預覽" allowfullscreen></iframe>
-                        <div class="mobile-home-bar"></div> 
-                    </div>
-                    <div style="text-align: center; margin-top: 15px;">
-                        <a href="https://www.figma.com/proto/4d9XfTAHSZfWSSaDvMuPlJ/%E5%85%AC%E8%BB%8Aapp?t=6HWiRsQ8gsI4ikV4-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&node-id=239-205&starting-point-node-id=239%3A205" target="_blank" style="color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600;">
-                            在新分頁開啟全螢幕 <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <div class="image-modal" id="imageModal" aria-hidden="true">
-        <div class="image-modal-content">
-            <img id="modalImage" src="" alt="">
-        </div>
-    </div>
 
     <script>
-        const carousel = document.querySelector('#carousel');
-        const phones = document.querySelectorAll('.small-phone');
-        const prevBtn = document.querySelector('.carousel-btn-left');
-        const nextBtn = document.querySelector('.carousel-btn-right');
-        const inlineDetail = document.querySelector('#inlineDetail');
-        const closeDetailBtn = document.querySelector('.close-detail');
-        const detailImage = document.querySelector('#detailImage');
-        const detailTitle = document.querySelector('#detailTitle');
-        const detailText = document.querySelector('#detailText');
-        const assetImages = document.querySelectorAll('.asset-image-wrap img');
-        const imageModal = document.querySelector('#imageModal');
-        const modalImage = document.querySelector('#modalImage');
-
-        let positions = ['pos-0', 'pos-1', 'pos-2', 'pos-3', 'pos-4'];
-        let isAnimating = false;
-
-        function updateCarousel() {
-            phones.forEach((phone, index) => {
-                phone.className = `small-phone ${positions[index]}`;
-            });
-        }
-
-        function lockAnimation() {
-            isAnimating = true;
-
-            setTimeout(() => {
-                isAnimating = false;
-            }, 850);
-        }
-
-        function showPrev() {
-            if (isAnimating) return;
-
-            const first = positions.shift();
-            positions.push(first);
-            updateCarousel();
-            lockAnimation();
-        }
-
-        function showNext() {
-            if (isAnimating) return;
-
-            const last = positions.pop();
-            positions.unshift(last);
-            updateCarousel();
-            lockAnimation();
-        }
-
-        function showDetail(phone) {
-            if (!phone.classList.contains('pos-2')) return;
-
-            const image = phone.querySelector('img');
-            const title = phone.dataset.title;
-            const text = phone.dataset.text;
-
-            detailImage.src = image.src;
-            detailImage.alt = image.alt;
-            detailTitle.textContent = title;
-            detailText.innerHTML = text.replaceAll('app', '<strong>app</strong>');
-
-            carousel.classList.add('detail-open');
-            inlineDetail.classList.remove('active');
-
-            requestAnimationFrame(() => {
-                inlineDetail.classList.add('active');
-            });
-        }
-
-        function closeDetail() {
-            inlineDetail.classList.remove('active');
-            carousel.classList.remove('detail-open');
-        }
-
-        function openImageModal(image) {
-            modalImage.src = image.src;
-            modalImage.alt = image.alt;
-            imageModal.classList.add('active');
-            imageModal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeImageModal() {
-            imageModal.classList.remove('active');
-            imageModal.setAttribute('aria-hidden', 'true');
-            modalImage.src = '';
-            modalImage.alt = '';
-            document.body.style.overflow = '';
-        }
-
-        phones.forEach((phone) => {
-            phone.addEventListener('click', () => {
-                showDetail(phone);
-            });
-        });
-
-        assetImages.forEach((image) => {
-            image.addEventListener('click', () => {
-                openImageModal(image);
-            });
-        });
-
-        imageModal.addEventListener('click', (event) => {
-            if (event.target === imageModal) {
-                closeImageModal();
-            }
-        });
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && imageModal.classList.contains('active')) {
-                closeImageModal();
-            }
-        });
-
-        prevBtn.addEventListener('click', showPrev);
-        nextBtn.addEventListener('click', showNext);
-        closeDetailBtn.addEventListener('click', closeDetail);
-
-        updateCarousel();
-
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
 
