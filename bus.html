@@ -206,7 +206,7 @@
             text-align: left;
         }
 
-        /* ✨ 6卡片專屬的「雙層梅花排版」(2-1-2-1) ✨ */
+        /* ✨ 5卡片專屬的「單層梅花排版」(2-1-2) ✨ */
         .info-plum-grid {
             width: min(100%, 860px);
             margin: 0 auto;
@@ -223,12 +223,11 @@
             grid-column: span 2;
         }
 
-        .info-plum-grid > .info-card:nth-child(3),
-        .info-plum-grid > .info-card:nth-child(6) {
+        .info-plum-grid > .info-card:nth-child(3) {
             grid-column: 2 / span 2;
         }
 
-        /* ✨ 5卡片專屬的「單層梅花排版」(2-1-2) ✨ */
+        /* ✨ 下方圖片區 5卡片專屬的「單層梅花排版」(2-1-2) ✨ */
         .asset-grid {
             width: min(100%, 860px);
             margin: 0 auto;
@@ -1024,10 +1023,10 @@
 
     <section class="bg-solid-section">
         <div class="section-inner">
-            <!-- ✨ 將 6 張卡片放入專屬的雙層梅花陣型 (2-1-2-1) ✨ -->
+            <!-- ✨ 5張卡片的單層梅花陣型 (2-1-2) ✨ -->
             <div class="info-plum-grid">
                 
-                <!-- 卡片 1 (原) -->
+                <!-- 卡片 1 -->
                 <div class="info-card">
                     <h2 class="info-title">設計概念</h2>
                     <p class="info-text">
@@ -1035,7 +1034,7 @@
                     </p>
                 </div>
 
-                <!-- 卡片 2 (原) -->
+                <!-- 卡片 2 -->
                 <div class="info-card expert-card">
                     <h2 class="info-title">改善策略</h2>
                     <div class="expert-scroll">
@@ -1077,52 +1076,7 @@
                     </div>
                 </div>
 
-                <!-- 卡片 3 (恢復原內容) -->
-                <div class="info-card interview-card">
-                    <h2 class="info-title">使用者訪談</h2>
-                    <div class="interview-scroll">
-                        <div class="interview-list">
-                            <div class="interview-item">
-                                <div class="interview-question">
-                                    <span class="interview-number">01</span>
-                                    <span class="interview-question-text">是否有使用過類似的產品或服務？</span>
-                                </div>
-                                <p class="interview-answer">
-                                    有，用過寵物晶片做身份確認與登記。
-                                </p>
-                            </div>
-                            <div class="interview-item">
-                                <div class="interview-question">
-                                    <span class="interview-number">02</span>
-                                    <span class="interview-question-text">平常你在什麼情境會想到要用？</span>
-                                </div>
-                                <p class="interview-answer">
-                                    通常是在寵物要打預防針或生病時會想到。
-                                </p>
-                            </div>
-                            <div class="interview-item">
-                                <div class="interview-question">
-                                    <span class="interview-number">03</span>
-                                    <span class="interview-question-text">使用時想達成的目標是什麼？</span>
-                                </div>
-                                <p class="interview-answer">
-                                    希望能即時判斷並處理寵物異常，保障健康。
-                                </p>
-                            </div>
-                            <div class="interview-item">
-                                <div class="interview-question">
-                                    <span class="interview-number">04</span>
-                                    <span class="interview-question-text">對這類產品的期待是什麼？</span>
-                                </div>
-                                <p class="interview-answer">
-                                    期待了解寵物無法表達的狀況，並輔助健康觀察。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 卡片 4 (恢復原內容) -->
+                <!-- 卡片 3 (置中) -->
                 <div class="info-card">
                     <h2 class="info-title">問題分析</h2>
                     <p class="info-text">
@@ -1130,7 +1084,7 @@
                     </p>
                 </div>
 
-                <!-- 卡片 5 (新增：可保留之優勢) -->
+                <!-- 卡片 4 -->
                 <div class="info-card expert-card">
                     <h2 class="info-title">可保留之優勢</h2>
                     <div class="expert-scroll">
@@ -1148,7 +1102,7 @@
                     </div>
                 </div>
 
-                <!-- 卡片 6 (新增：最想改善的地方) -->
+                <!-- 卡片 5 -->
                 <div class="info-card expert-card">
                     <h2 class="info-title">最想改善的地方</h2>
                     <div class="expert-scroll">
@@ -1176,35 +1130,35 @@
                 <div class="asset-card">
                     <h2 class="asset-title">同理心地圖</h2>
                     <div class="asset-image-wrap">
-                        <img src="./pict/pet (1).png" alt="同理心地圖">
+                        <img src="./pict/bus2.png" alt="同理心地圖">
                     </div>
                 </div>
 
                 <div class="asset-card">
                     <h2 class="asset-title">icon</h2>
                     <div class="asset-image-wrap">
-                        <img src="./pict/icon.png" alt="icon">
+                        <img src="./pict/bus3.png" alt="icon">
                     </div>
                 </div>
 
                 <div class="asset-card">
-                    <h2 class="asset-title">新增項目</h2>
+                    <h2 class="asset-title">persona</h2>
                     <div class="asset-image-wrap">
-                        <img src="./pict/icon.png" alt="新增項目">
+                        <img src="./pict/bus4.png" alt="persona">
                     </div>
                 </div>
 
                 <div class="asset-card">
-                    <h2 class="asset-title">服務藍圖</h2>
+                    <h2 class="asset-title">色票</h2>
                     <div class="asset-image-wrap">
-                        <img src="./pict/service-blueprint.png" alt="服務藍圖">
+                        <img src="./pict/bus5.png" alt="色票">
                     </div>
                 </div>
 
                 <div class="asset-card">
                     <h2 class="asset-title">流程圖</h2>
                     <div class="asset-image-wrap">
-                        <img src="./pict/flow-chart.png" alt="流程圖">
+                        <img src="./pict/bus6.png" alt="流程圖">
                     </div>
                 </div>
             </div>
